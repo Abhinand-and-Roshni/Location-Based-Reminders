@@ -36,15 +36,10 @@ public class EnterName extends AppCompatActivity {
                 usersname=editName.getText().toString();
                 dbHandler.setUserName(SignUp.phone,usersname);
                 System.out.println("Name added!");
-                Toast.makeText(EnterName.this, "Name added! Thank you", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EnterName.this, "Logging into newly created account...", Toast.LENGTH_SHORT).show();
                 Intent intent7= new Intent(EnterName.this,WelcomePage.class);
                 startActivity(intent7);
             }
         });
-
-
-
-
-
     }
 }

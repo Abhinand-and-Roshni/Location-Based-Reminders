@@ -7,25 +7,26 @@
     tools:context=".SignUp">
 
 
-
     <EditText
         android:id="@+id/idEdtPhoneNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="323dp"
+        android:layout_height="52dp"
         android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
         android:hint="10-Digit Phone Number"
         android:importantForAutofill="no"
         android:inputType="phone"
+        android:shadowColor="#0C0C0C"
         app:layout_constraintBottom_toTopOf="@+id/idBtnGetOtp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.875"
-        tools:layout_editor_absoluteX="10dp" />
+        app:layout_constraintVertical_bias="0.844" />
 
     <Button
         android:id="@+id/idBtnGetOtp"
-        android:layout_width="100sp"
-        android:layout_height="wrap_content"
+        android:layout_width="119dp"
+        android:layout_height="69dp"
         android:layout_below="@id/idEdtPhoneNumber"
         android:layout_margin="10dp"
         android:text="Generate OTP"
@@ -40,23 +41,23 @@
 
     <EditText
         android:id="@+id/idEdtOtp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="323dp"
+        android:layout_height="52dp"
         android:layout_below="@id/idBtnGetOtp"
         android:layout_margin="10dp"
         android:hint="Enter OTP"
         android:importantForAutofill="no"
         android:inputType="phone"
         app:layout_constraintBottom_toTopOf="@+id/idBtnVerify"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/idBtnGetOtp"
-        app:layout_constraintVertical_bias="0.687"
-        tools:layout_editor_absoluteX="13dp" />
+        app:layout_constraintVertical_bias="0.626" />
 
     <Button
         android:id="@+id/idBtnVerify"
-        android:layout_width="wrap_content
-"
-        android:layout_height="41dp"
+        android:layout_width="119dp "
+        android:layout_height="69dp"
         android:layout_below="@id/idEdtOtp"
         android:layout_margin="10dp"
         android:layout_marginBottom="168dp"

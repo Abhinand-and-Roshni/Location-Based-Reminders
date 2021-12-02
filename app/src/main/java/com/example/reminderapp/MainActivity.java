@@ -12,6 +12,17 @@ public class MainActivity extends AppCompatActivity {
 
     TextView tv_welcome;
     Button bt_login,bt_signup;
+
+    @Override
+    public void onBackPressed()
+    {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
         tv_welcome=findViewById(R.id.tv_welcome);
         bt_signup=findViewById(R.id.bt_signup);
+
 
 
 

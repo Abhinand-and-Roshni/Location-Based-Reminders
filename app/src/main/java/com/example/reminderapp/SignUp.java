@@ -67,6 +67,7 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 verifyCode(editOTP.getText().toString());
+
             }
         });
     }
@@ -76,13 +77,16 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
+                    editOTP.setText("");
+                    editPhone.setText("");
+
                     Toast.makeText(SignUp.this, "CORRECT CREDENTIAL", Toast.LENGTH_SHORT).show();
 
 
                     if(!dbHandler.checkRecord(phone)) {
                         System.out.println("New record");
                         dbHandler.addNewRecord(phone);
-                        Toast.makeText(SignUp.this, "RECORD ADDED! WELCOME", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignUp.this, "Welcome!", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(SignUp.this, EnterName.class));
 
                     }
@@ -94,7 +98,7 @@ public class SignUp extends AppCompatActivity {
                             startActivity( new Intent(SignUp.this, EnterName.class));
                         }
                         else{
-                            Toast.makeText(SignUp.this, "Name already entered for this account. Redirecting...", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUp.this, "Logging into existing account..", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(SignUp.this,WelcomePage.class));
                         }
 
@@ -103,6 +107,8 @@ public class SignUp extends AppCompatActivity {
                 }
                 else{
                     Toast.makeText(SignUp.this, "INCORRECT OTP!", Toast.LENGTH_SHORT).show();
+                    editOTP.setText("");
+
                 }
 
             }
