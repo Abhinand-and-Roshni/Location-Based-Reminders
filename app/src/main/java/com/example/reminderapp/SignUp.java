@@ -77,25 +77,25 @@ public class SignUp extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
                     Toast.makeText(SignUp.this, "CORRECT CREDENTIAL", Toast.LENGTH_SHORT).show();
+
+
                     if(!dbHandler.checkRecord(phone)) {
                         System.out.println("New record");
                         dbHandler.addNewRecord(phone);
                         Toast.makeText(SignUp.this, "RECORD ADDED! WELCOME", Toast.LENGTH_SHORT).show();
-                        if(!dbHandler.checkUserName(phone)) {
-                            Intent intent3 = new Intent(SignUp.this, EnterName.class);
-                            startActivity(intent3);
-                        }
+                        startActivity(new Intent(SignUp.this, EnterName.class));
+
                     }
                     else{
                         System.out.println("Record exists");
                         Toast.makeText(SignUp.this, "ALREADY EXISTING RECORD! WELCOME BACK", Toast.LENGTH_SHORT).show();
-                        if(dbHandler.checkUserName(phone)){
-                            Toast.makeText(SignUp.this, "Name already entered for this account. Redirecting...", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(SignUp.this,WelcomePage.class));
+
+                        if(!dbHandler.checkUserName(phone)){
+                            startActivity( new Intent(SignUp.this, EnterName.class));
                         }
                         else{
-                            Intent intent5 = new Intent(SignUp.this, EnterName.class);
-                            startActivity(intent5);
+                            Toast.makeText(SignUp.this, "Name already entered for this account. Redirecting...", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(SignUp.this,WelcomePage.class));
                         }
 
                     }

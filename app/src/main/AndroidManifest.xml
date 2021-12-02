@@ -15,7 +15,7 @@
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
         <activity android:name=".WelcomePage"></activity>
         <activity
-            android:name=".select_location"
+            android:name=".EnterName"
             android:exported="false" />
         <activity android:name=".SignUp" />
         <activity
