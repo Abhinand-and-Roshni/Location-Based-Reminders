@@ -66,7 +66,12 @@ public class SignUp extends AppCompatActivity {
         verifyOTPBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                verifyCode(editOTP.getText().toString());
+                try{
+                    verifyCode(editOTP.getText().toString());
+                }catch(Exception e){
+                    Toast.makeText(SignUp.this, "Verify your number via OTP first!", Toast.LENGTH_SHORT).show();
+                }
+
 
             }
         });
