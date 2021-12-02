@@ -52,8 +52,14 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 System.out.println("Phone number entered..");
-                phone="+91"+editPhone.getText().toString();
-                sendVerificationCode(phone);
+                if(editPhone.length()==10){
+                    phone="+91"+editPhone.getText().toString();
+                    sendVerificationCode(phone);
+                }
+                else{
+                    Toast.makeText(SignUp.this, "Enter valid phone number!", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
