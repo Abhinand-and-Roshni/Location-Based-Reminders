@@ -24,17 +24,19 @@
 
     <Button
         android:id="@+id/idBtnGetOtp"
-        android:layout_width="match_parent"
+        android:layout_width="100sp"
         android:layout_height="wrap_content"
         android:layout_below="@id/idEdtPhoneNumber"
         android:layout_margin="10dp"
         android:text="Get OTP"
         android:textAllCaps="false"
+        app:cornerRadius="100sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.842"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.456" />
 
     <EditText
         android:id="@+id/idEdtOtp"
@@ -52,19 +54,22 @@
 
     <Button
         android:id="@+id/idBtnVerify"
-        android:layout_width="389dp"
+        android:layout_width="200sp
+"
         android:layout_height="41dp"
         android:layout_below="@id/idEdtOtp"
         android:layout_margin="10dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
         android:layout_marginBottom="168dp"
         android:text="Create Account"
         android:textAllCaps="false"
+        app:cornerRadius="100sp"
         app:layout_constraintBottom_toBottomOf="parent"
+
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/idBtnGetOtp"
-        app:layout_constraintVertical_bias="0.659" />
+        app:layout_constraintVertical_bias="0.462" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

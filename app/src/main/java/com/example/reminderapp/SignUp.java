@@ -87,6 +87,8 @@ public class SignUp extends AppCompatActivity {
                         Toast.makeText(SignUp.this, "ALREADY EXISTING RECORD! WELCOME BACK", Toast.LENGTH_SHORT).show();
 
                     }
+                    Intent intent3=new Intent(SignUp.this,select_location.class);
+                    startActivity(intent3);
 
                 }
                 else{
