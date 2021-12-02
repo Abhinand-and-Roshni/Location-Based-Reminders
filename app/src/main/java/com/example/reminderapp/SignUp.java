@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,7 +12,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskExecutors;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +27,9 @@ public class SignUp extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText editPhone, editOTP;
     private Button verifyOTPBtn, generateOTPBtn;
+
+    private Button btn_surpass; //TODO: remove after done
+
     private String verificationId;
     public  static String phone;
 
@@ -75,6 +76,14 @@ public class SignUp extends AppCompatActivity {
 
             }
         });
+        //TODO: remove test button after coding
+        btn_surpass = (Button) findViewById(R.id.btn_surpass);
+        btn_surpass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SignUp.this, WelcomePage.class));
+            }
+        });
     }
     private void signInWithCredential(PhoneAuthCredential credential)
     {
@@ -92,7 +101,7 @@ public class SignUp extends AppCompatActivity {
                         System.out.println("New record");
                         dbHandler.addNewRecord(phone);
                         Toast.makeText(SignUp.this, "Welcome!", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(SignUp.this, EnterName.class));
+                        startActivity(new Intent(SignUp.this, setName.class));
 
                     }
                     else{
@@ -100,7 +109,7 @@ public class SignUp extends AppCompatActivity {
                         Toast.makeText(SignUp.this, "ALREADY EXISTING RECORD! WELCOME BACK", Toast.LENGTH_SHORT).show();
 
                         if(!dbHandler.checkUserName(phone)){
-                            startActivity( new Intent(SignUp.this, EnterName.class));
+                            startActivity( new Intent(SignUp.this, setName.class));
                         }
                         else{
                             Toast.makeText(SignUp.this, "Logging into existing account..", Toast.LENGTH_SHORT).show();

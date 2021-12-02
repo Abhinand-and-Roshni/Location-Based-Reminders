@@ -1,7 +1,6 @@
 package com.example.reminderapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.reminderapp.SignUp;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class EnterName extends AppCompatActivity {
+public class setName extends AppCompatActivity {
 
     private TextView helloUser;
     private EditText editName;
@@ -22,13 +21,13 @@ public class EnterName extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_location);
+        setContentView(R.layout.activity_set_name);
 
         helloUser=findViewById(R.id.helloUser);
         editName=findViewById(R.id.editName);
         bt_sb=findViewById(R.id.bt_sb);
 
-        dbHandler= new DBHandler(EnterName.this);
+        dbHandler= new DBHandler(setName.this);
 
         bt_sb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,8 +35,8 @@ public class EnterName extends AppCompatActivity {
                 usersname=editName.getText().toString();
                 dbHandler.setUserName(SignUp.phone,usersname);
                 System.out.println("Name added!");
-                Toast.makeText(EnterName.this, "Logging into newly created account...", Toast.LENGTH_SHORT).show();
-                Intent intent7= new Intent(EnterName.this,WelcomePage.class);
+                Toast.makeText(setName.this, "Logging into newly created account...", Toast.LENGTH_SHORT).show();
+                Intent intent7= new Intent(setName.this,WelcomePage.class);
                 startActivity(intent7);
             }
         });

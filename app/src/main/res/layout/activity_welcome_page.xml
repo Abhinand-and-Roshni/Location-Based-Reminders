@@ -37,7 +37,7 @@
         android:text="What would you like to do?"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/btn_view_rem"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.325"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,18 +45,18 @@
         app:layout_constraintVertical_bias="0.171" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_create_rem"
         android:layout_width="191dp"
         android:layout_height="62dp"
         android:text="Create Reminder"
         app:cornerRadius="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/btn_view_rem"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btn_view_rem"
         android:layout_width="191dp"
         android:layout_height="62dp"
         android:layout_marginBottom="176dp"
@@ -67,7 +67,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/btn_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Log Out"

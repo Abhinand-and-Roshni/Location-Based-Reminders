@@ -13,9 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
-        <activity android:name=".WelcomePage"></activity>
         <activity
-            android:name=".EnterName"
+            android:name=".selectLocation"
+            android:exported="false" />
+        <activity android:name=".WelcomePage" />
+        <activity
+            android:name=".setName"
             android:exported="false" />
         <activity android:name=".SignUp" />
         <activity
