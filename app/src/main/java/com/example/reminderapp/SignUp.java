@@ -30,7 +30,7 @@ public class SignUp extends AppCompatActivity {
     private EditText editPhone, editOTP;
     private Button verifyOTPBtn, generateOTPBtn;
     private String verificationId;
-    public String phone;
+    public  static String phone;
 
     private DBHandler dbHandler;
 
@@ -81,14 +81,24 @@ public class SignUp extends AppCompatActivity {
                         System.out.println("New record");
                         dbHandler.addNewRecord(phone);
                         Toast.makeText(SignUp.this, "RECORD ADDED! WELCOME", Toast.LENGTH_SHORT).show();
+                        if(!dbHandler.checkUserName(phone)) {
+                            Intent intent3 = new Intent(SignUp.this, EnterName.class);
+                            startActivity(intent3);
+                        }
                     }
                     else{
                         System.out.println("Record exists");
                         Toast.makeText(SignUp.this, "ALREADY EXISTING RECORD! WELCOME BACK", Toast.LENGTH_SHORT).show();
+                        if(dbHandler.checkUserName(phone)){
+                            Toast.makeText(SignUp.this, "Name already entered for this account. Redirecting...", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(SignUp.this,WelcomePage.class));
+                        }
+                        else{
+                            Intent intent5 = new Intent(SignUp.this, EnterName.class);
+                            startActivity(intent5);
+                        }
 
                     }
-                    Intent intent3=new Intent(SignUp.this,select_location.class);
-                    startActivity(intent3);
 
                 }
                 else{
