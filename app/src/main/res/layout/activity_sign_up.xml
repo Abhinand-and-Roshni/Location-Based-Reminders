@@ -54,7 +54,7 @@
 
     <Button
         android:id="@+id/idBtnVerify"
-        android:layout_width="200sp
+        android:layout_width="wrap_content
 "
         android:layout_height="41dp"
         android:layout_below="@id/idEdtOtp"

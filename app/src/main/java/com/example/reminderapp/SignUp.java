@@ -120,6 +120,7 @@ public class SignUp extends AppCompatActivity {
         public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
             super.onCodeSent(s, forceResendingToken);
             verificationId = s;
+            Toast.makeText(SignUp.this, "OTP has been sent!", Toast.LENGTH_SHORT).show();
         }
 
         @Override
