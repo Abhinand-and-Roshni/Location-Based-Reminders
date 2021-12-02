@@ -11,7 +11,7 @@
         android:layout_width="302dp"
         android:layout_height="105dp"
         android:gravity="center_horizontal"
-        android:text="Location-Based Reminder"
+        android:text="@string/Title_Home"
         android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="36sp"
@@ -24,8 +24,8 @@
 
     <Button
         android:id="@+id/bt_signup"
-        android:layout_width="107dp"
-        android:layout_height="103dp"
+        android:layout_width="158dp"
+        android:layout_height="101dp"
         android:layout_marginBottom="244dp"
         android:text="Log In/Sign Up with OTP"
         app:cornerRadius="10sp"
