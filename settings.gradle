@@ -1,0 +1,3 @@
+include ':mysql-connector'
+include ':app'
+rootProject.name = "ReminderApp"
