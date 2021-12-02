@@ -2,6 +2,7 @@ package com.example.reminderapp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -30,6 +31,18 @@ public class DBHandler extends SQLiteOpenHelper {
         db.insert(TABLE_NAME,null,values);
         System.out.println("Records added..");
         db.close();
+    }
+
+    public boolean checkRecord(String phone)
+    {
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursorPhones=db.rawQuery("SELECT * FROM "+TABLE_NAME+" WHERE "+PHONE_NO+" =? ",new String[]{phone+""});
+        if(cursorPhones.getCount()>0)
+        {
+            return true;
+        }
+        cursorPhones.close();
+        return false;
     }
 
     @Override

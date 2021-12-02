@@ -24,8 +24,8 @@
 
     <Button
         android:id="@+id/bt_signup"
-        android:layout_width="109dp"
-        android:layout_height="80dp"
+        android:layout_width="107dp"
+        android:layout_height="103dp"
         android:layout_marginBottom="244dp"
         android:text="Log In/Sign Up with OTP"
         app:cornerRadius="10sp"

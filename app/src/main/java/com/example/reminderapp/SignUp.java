@@ -71,14 +71,21 @@ public class SignUp extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
                     Toast.makeText(SignUp.this, "CORRECT CREDENTIAL", Toast.LENGTH_SHORT).show();
-                    dbHandler.addNewRecord(phone);
-                    Toast.makeText(SignUp.this, "RECORD ADDED!", Toast.LENGTH_SHORT).show();
+                    if(!dbHandler.checkRecord(phone)) {
+                        System.out.println("New record");
+                        dbHandler.addNewRecord(phone);
+                        Toast.makeText(SignUp.this, "RECORD ADDED! WELCOME", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        System.out.println("Record exists");
+                        Toast.makeText(SignUp.this, "ALREADY EXISTING RECORD! WELCOME BACK", Toast.LENGTH_SHORT).show();
+
+                    }
 
                 }
                 else{
                     Toast.makeText(SignUp.this, "INCORRECT OTP!", Toast.LENGTH_SHORT).show();
                 }
-
 
             }
         });
