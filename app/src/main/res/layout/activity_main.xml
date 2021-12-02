@@ -23,7 +23,7 @@
         app:layout_constraintVertical_bias="0.337" />
 
     <Button
-        android:id="@+id/bt_signup"
+        android:id="@+id/bt_signups"
         android:layout_width="197dp"
         android:layout_height="67dp"
         android:layout_marginBottom="244dp"
@@ -45,7 +45,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bt_signup"
+        app:layout_constraintTop_toBottomOf="@+id/bt_signups"
         app:layout_constraintVertical_bias="0.795" />
 
     <TextView

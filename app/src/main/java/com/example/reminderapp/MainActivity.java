@@ -11,7 +11,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     TextView tv_welcome;
-    Button bt_login,bt_signup;
+    Button bt_signups;
 
     @Override
     public void onBackPressed()
@@ -29,12 +29,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         tv_welcome=findViewById(R.id.tv_welcome);
-        bt_signup=findViewById(R.id.bt_signup);
+        bt_signups=findViewById(R.id.bt_signups);
 
 
 
 
-        bt_signup.setOnClickListener(new View.OnClickListener() {
+        bt_signups.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this,SignUp.class));
