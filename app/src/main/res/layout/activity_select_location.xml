@@ -41,15 +41,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.17" />
 
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/search_loc"
-        android:layout_width="303dp"
-        android:layout_height="351dp"
-        android:visibility="visible"
+    <fragment
+        android:id="@+id/frag_map"
+        class="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="381dp"
+        android:layout_height="396dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="SpeakableTextPresentCheck"
-        tools:visibility="visible" />
+        app:layout_constraintVertical_bias="0.58" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

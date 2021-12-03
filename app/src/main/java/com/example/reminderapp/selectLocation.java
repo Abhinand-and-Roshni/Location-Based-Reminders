@@ -1,5 +1,6 @@
 package com.example.reminderapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
@@ -10,7 +11,9 @@ import android.provider.Settings;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -18,15 +21,20 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
-public class selectLocation extends AppCompatActivity {
+public class selectLocation extends AppCompatActivity implements OnMapReadyCallback{
+
+    boolean isPermissionGranted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_location);
+        checkMyPermissions(); //location settings permission (access or deny)
 
-
-        checkMyPermissions();
+        if(isPermissionGranted){
+            SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.frag_map);
+            supportMapFragment.getMapAsync(this);
+        }
     }
 
     private void checkMyPermissions() {
@@ -50,5 +58,10 @@ public class selectLocation extends AppCompatActivity {
                 permissionToken.continuePermissionRequest();
             }
         }).check();
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+
     }
 }
