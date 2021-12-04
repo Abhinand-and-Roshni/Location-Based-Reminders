@@ -53,6 +53,7 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
         Dexter.withContext(this).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(new PermissionListener() {
             @Override
             public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
+                isPermissionGranted = true;
                 Toast.makeText(selectLocation.this, "Location Permission Granted", Toast.LENGTH_SHORT).show();
             }
 
