@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHandler extends SQLiteOpenHelper {
 
     public static final String DB_NAME ="info_users";
-    public static int DB_VERSION=2;
+    public static int DB_VERSION=3;
     public static final String TABLE_NAME="USERS";
     public static final String PHONE_NO="PHONE_NO";
     public static final String USER_NAME="USER_NAME";
@@ -18,6 +18,10 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String REMINDER_NAME="REMINDER_NAME";
     public static final String LATITUDE="LATITUDE";
     public static final String LONGITUDE="LONGITUDE";
+    public static final String PLACE_NAME="PLACE_NAME";
+
+
+    private static final String DATABASE_ALTER_REMINDERS = "ALTER TABLE "+TABLE_REMINDER+ " ADD COLUMN " + PLACE_NAME + " TEXT";
 
     public DBHandler(Context context)
     {
@@ -35,12 +39,13 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
-    public void addReminderRecord(String remname, String latitude, String longitude)
+    public void addReminderRecord(String remname,String remplace, String latitude, String longitude)
     {
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues values=new ContentValues();
         values.put(PHONE_NO,SignUp.phone);
         values.put(REMINDER_NAME,remname);
+        values.put(PLACE_NAME,remplace);
         values.put(LATITUDE,latitude);
         values.put(LONGITUDE,longitude);
         db.insert(TABLE_REMINDER,null,values);
@@ -130,6 +135,10 @@ public class DBHandler extends SQLiteOpenHelper {
         {
             String query2 = "CREATE TABLE "+TABLE_REMINDER+" ("+REMINDER_NAME+" TEXT,"+LATITUDE+" TEXT,"+LONGITUDE+" TEXT,"+PHONE_NO+" TEXT REFERENCES "+TABLE_NAME+")";
             db.execSQL(query2);
+        }
+        if(oldVersion<3)
+        {
+            db.execSQL(DATABASE_ALTER_REMINDERS);
         }
     }
 

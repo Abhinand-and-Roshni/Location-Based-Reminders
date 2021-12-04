@@ -174,7 +174,7 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
 
                 //code for adding details to database table - user's reminder
                 else{
-                    dbHandler.addReminderRecord(et_rem.getText().toString(),lat1s,long1s);
+                    dbHandler.addReminderRecord(et_rem.getText().toString(),et_location.getText().toString(),lat1s,long1s);
                     Toast.makeText(selectLocation.this, "Record added ! thank you!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(selectLocation.this,WelcomePage.class));
                 }
