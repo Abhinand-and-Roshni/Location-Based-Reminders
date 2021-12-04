@@ -49,6 +49,7 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
     Button btn_add_rem;
     double lat1, long1;
     String lat1s, long1s;
+    private DBHandler dbHandler;
 
 
     public void onBackPressed()
@@ -111,6 +112,9 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
         et_rem = findViewById(R.id.et_rem); //USER SPECIFIED REMINDER
         btn_add_rem = findViewById(R.id.btn_add_rem);
 
+        dbHandler= new DBHandler(selectLocation.this);
+
+
         checkMyPermissions(); //location settings permission (access or deny)
 
         if(isPermissionGranted){
@@ -169,6 +173,11 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
                 }
 
                 //code for adding details to database table - user's reminder
+                else{
+                    dbHandler.addReminderRecord(et_rem.getText().toString(),lat1s,long1s);
+                    Toast.makeText(selectLocation.this, "Record added ! thank you!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(selectLocation.this,WelcomePage.class));
+                }
             }
         });
 
