@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 
     <application
         android:allowBackup="true"
@@ -42,6 +44,14 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCB3Rlj45I-89cjTTTiVRKPLwV_hGwi29U" /> <!-- roshni: key from console.developers google-->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" /> <!-- roshni: maps api https://developers.google.com/maps/documentation/android-sdk/config-->
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+
 
 
 
