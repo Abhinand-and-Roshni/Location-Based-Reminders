@@ -1,8 +1,6 @@
 package com.example.reminderapp;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
@@ -12,21 +10,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApi;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,7 +28,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -50,8 +43,11 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
 
     boolean isPermissionGranted;
     GoogleMap mGoogleMap;
-    ImageView img_search;
-    EditText et_location;
+    ImageView img_search_icon;
+    EditText et_location, et_rem;
+    Button btn_add_rem;
+    double lat1, long1;
+    String lat1s, long1s;
 
 
     @Override
@@ -59,8 +55,10 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_location);
 
-        img_search = findViewById(R.id.img_search);
-        et_location = findViewById(R.id.et_location);
+        img_search_icon = findViewById(R.id.img_search_icon);
+        et_location = findViewById(R.id.et_location); //USER SPECIFIED LOCATION (dont store in db - only store long and lat)
+        et_rem = findViewById(R.id.et_rem); //USER SPECIFIED REMINDER
+        btn_add_rem = findViewById(R.id.btn_add_rem);
 
         checkMyPermissions(); //location settings permission (access or deny)
 
@@ -74,7 +72,7 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
             }
         }
 
-        img_search.setOnClickListener(new View.OnClickListener() {
+        img_search_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String location = et_location.getText().toString();
@@ -86,11 +84,14 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
                         List<Address> listAddress = geocoder.getFromLocationName(location,1 );
                         if(listAddress.size()>0){
                             LatLng latLng = new LatLng(listAddress.get(0).getLatitude(), listAddress.get(0).getLongitude());
-                            double lat1 = listAddress.get(0).getLatitude();
-                            double long1 = listAddress.get(0).getLongitude();
-                            String lat1s = Double.toString(lat1);
-                            String long1s = Double.toString(long1);
-                            Toast.makeText(selectLocation.this, lat1s + " " + long1s , Toast.LENGTH_SHORT).show();
+
+                            lat1 = listAddress.get(0).getLatitude(); //LATITUDE OF THE REMINDER LOCATION
+                            long1 = listAddress.get(0).getLongitude(); //LONGITUDE OF THE REMINDER LOCATION
+
+                            lat1s = Double.toString(lat1); //for toast msg
+                            long1s = Double.toString(long1); //for toast msg
+
+                            Toast.makeText(selectLocation.this, lat1s + " & " + long1s , Toast.LENGTH_SHORT).show();
                             MarkerOptions markerOptions = new MarkerOptions();
                             markerOptions.title("Here");
                             markerOptions.position(latLng);
@@ -103,6 +104,20 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
                     }
 
                 }
+            }
+        });
+
+        btn_add_rem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(et_rem.length() == 0){
+                    Toast.makeText(selectLocation.this, "Enter valid reminder!", Toast.LENGTH_SHORT).show();
+                }
+                if(lat1s==null || long1s==null){
+                    Toast.makeText(selectLocation.this, "Please select a valid location", Toast.LENGTH_SHORT).show();
+                }
+
+                //code for adding details to database table - user's reminder
             }
         });
 

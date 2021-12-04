@@ -3,4 +3,5 @@
     <string name="Title_Home">Location Based Reminders</string>
     <string name="str_enter_location">Enter the location:</string>
     <string name="str_username">What would you liked to be called?</string>
+    <string name="str_rem_title">What is the reminder you want to set?</string>
 </resources>
