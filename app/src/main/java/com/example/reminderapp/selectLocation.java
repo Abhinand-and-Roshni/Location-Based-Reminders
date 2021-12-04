@@ -1,6 +1,7 @@
 package com.example.reminderapp;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
@@ -49,6 +50,56 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
     double lat1, long1;
     String lat1s, long1s;
 
+
+    public void onBackPressed()
+    {
+        AlertDialog.Builder builder
+                = new AlertDialog
+                .Builder(selectLocation.this);
+
+        builder.setMessage("You will have to re-fill the form");
+
+        builder.setTitle("Are you sure?");
+
+
+        builder.setCancelable(false);
+
+
+        builder
+                .setPositiveButton(
+                        "Yes",
+                        new DialogInterface
+                                .OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which)
+                            {
+
+                                startActivity(new Intent(selectLocation.this,WelcomePage.class));
+                            }
+                        });
+
+        builder
+                .setNegativeButton(
+                        "No",
+                        new DialogInterface
+                                .OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which)
+                            {
+
+                                dialog.cancel();
+                            }
+                        });
+
+
+        AlertDialog alertDialog = builder.create();
+
+        alertDialog.show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

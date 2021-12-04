@@ -1,7 +1,9 @@
 package com.example.reminderapp;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,6 +17,57 @@ public class WelcomePage extends AppCompatActivity {
     private String usersname;
     private DBHandler dbHandler;
     private Button btn_create_rem,btn_view_rem,btn_logout;
+
+
+    public void onBackPressed()
+    {
+        AlertDialog.Builder builder
+                = new AlertDialog
+                .Builder(WelcomePage.this);
+
+        builder.setMessage("Are you sure you want to log out?");
+
+        builder.setTitle("Alert !");
+
+
+        builder.setCancelable(false);
+
+
+        builder
+                .setPositiveButton(
+                        "Yes",
+                        new DialogInterface
+                                .OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which)
+                            {
+
+                                startActivity(new Intent(WelcomePage.this,MainActivity.class));
+                            }
+                        });
+
+        builder
+                .setNegativeButton(
+                        "No",
+                        new DialogInterface
+                                .OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which)
+                            {
+
+                                dialog.cancel();
+                            }
+                        });
+
+
+        AlertDialog alertDialog = builder.create();
+
+        alertDialog.show();
+    }
 
 
     @Override
