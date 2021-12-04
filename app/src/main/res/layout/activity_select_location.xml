@@ -23,6 +23,7 @@
         android:id="@+id/et_location"
         android:layout_width="269dp"
         android:layout_height="46dp"
+        android:hint="Anna University, Chennai"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.38"
@@ -31,7 +32,7 @@
         app:layout_constraintVertical_bias="0.173" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/img_search"
         android:layout_width="39dp"
         android:layout_height="38dp"
         android:src="@drawable/search_icon"
