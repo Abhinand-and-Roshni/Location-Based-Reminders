@@ -34,87 +34,20 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
-public class selectLocation extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class selectLocation extends AppCompatActivity implements OnMapReadyCallback {
 
     boolean isPermissionGranted;
     GoogleMap mGoogleMap;
-    FloatingActionButton btn_live_loc;
-    private FusedLocationProviderClient mLocationClient;
-    private int GPS_REQUEST_CODE = 9001;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_location);
-
-        btn_live_loc = findViewById(R.id.btn_live_loc);
         checkMyPermissions(); //location settings permission (access or deny)
 
-        initMap();
-
-        mLocationClient = new FusedLocationProviderClient(this);
-        btn_live_loc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getCurrentUserLocation();
-            }
-        });
-
-
     }
 
-    @SuppressLint("MissingPermission")
-    private void getCurrentUserLocation() {
-        mLocationClient.getLastLocation().addOnCompleteListener(task ->
-        {
-            if(task.isSuccessful()){
-                Location location = task.getResult();
-                gotoLocation(location.getLatitude(), location.getLongitude());
-            }
-        });
-    }
-
-    private void gotoLocation(double latitude, double longitude) {
-        LatLng Latlng = new LatLng(latitude, longitude);
-        try{CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(Latlng, 18);
-            mGoogleMap.moveCamera(cameraUpdate);
-            mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        }catch(Exception e){
-            Toast.makeText(selectLocation.this, "Uh Oh! Something went wrong.", Toast.LENGTH_SHORT).show();
-        }
-
-
-    }
-
-    private void initMap() {
-        if(isPermissionGranted){
-            if(isGPS_Enabled()){
-                SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.frag_map);
-                supportMapFragment.getMapAsync(this);
-            }
-
-        }
-    }
-    private boolean isGPS_Enabled(){
-        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-        boolean providerEnable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-        if(providerEnable){
-            return true;
-        }else{
-            AlertDialog alertDialog = new AlertDialog.Builder(this)
-                    .setTitle("GPS Permission Required")
-                    .setMessage("GPS is required for this application. Please grant permission.")
-            .setPositiveButton("Yes", ((dialogInterface, i) -> {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivityForResult(intent, GPS_REQUEST_CODE);
-            }))
-                    .setCancelable(false)
-                    .show();
-        }
-        return false;
-    }
 
     private void checkMyPermissions() {
         Dexter.withContext(this).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(new PermissionListener() {
@@ -148,34 +81,5 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
 
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
 
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == GPS_REQUEST_CODE){
-            LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-            boolean providerEnable = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-            if(providerEnable){
-                Toast.makeText(this, "GPS has been enabled.", Toast.LENGTH_SHORT).show();
-            }else{
-                Toast.makeText(this, "GPS has not been enabled!", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 }
