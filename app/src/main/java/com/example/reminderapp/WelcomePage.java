@@ -88,8 +88,54 @@ public class WelcomePage extends AppCompatActivity {
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(WelcomePage.this, MainActivity.class));
-                Toast.makeText(WelcomePage.this, "Logged out!", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder
+                        = new AlertDialog
+                        .Builder(WelcomePage.this);
+
+                builder.setMessage("Are you sure you want to log out?");
+
+                builder.setTitle("Alert !");
+
+
+                builder.setCancelable(false);
+
+
+                builder
+                        .setPositiveButton(
+                                "Yes",
+                                new DialogInterface
+                                        .OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which)
+                                    {
+
+                                        startActivity(new Intent(WelcomePage.this, MainActivity.class));
+                                        Toast.makeText(WelcomePage.this, "Logged out!", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                builder
+                        .setNegativeButton(
+                                "No",
+                                new DialogInterface
+                                        .OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which)
+                                    {
+
+                                        dialog.cancel();
+                                    }
+                                });
+
+
+                AlertDialog alertDialog = builder.create();
+
+                alertDialog.show();
+
             }
         });
 
