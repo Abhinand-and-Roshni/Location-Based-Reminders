@@ -33,9 +33,9 @@ public class ReminderRVAdapter extends RecyclerView.Adapter<ReminderRVAdapter.Vi
 
         reminderDetails modal = reminderDetailsArrayList.get(position);
         holder.reminderNameTV.setText(modal.getReminderName());
-        holder.reminderPlaceTV.setText(modal.getReminderLocation());
-        holder.latitudeTV.setText(modal.getLatitude());
-        holder.longitudeTV.setText(modal.getLongitude());
+        holder.reminderPlaceTV.setText("Location: "+modal.getReminderLocation());
+        holder.latitudeTV.setText("Latitude: "+modal.getLatitude());
+        holder.longitudeTV.setText("Longitude: "+modal.getLongitude());
     }
 
     @Override
