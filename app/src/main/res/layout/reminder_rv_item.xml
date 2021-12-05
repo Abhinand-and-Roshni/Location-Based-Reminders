@@ -6,7 +6,7 @@
     android:layout_margin="20dp"
     android:elevation="10dp"
     app:cardBackgroundColor="#FFFFFF"
-    app:cardCornerRadius="20dp">
+    app:cardCornerRadius="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,11 +14,11 @@
         android:layout_margin="3dp"
         android:orientation="vertical">
 
-        <!--text view for our course name-->
         <TextView
             android:id="@+id/idReminderName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#DFDFEF"
             android:gravity="center"
             android:padding="3dp"
             android:text="Reminder Name"
@@ -31,7 +31,6 @@
             android:orientation="horizontal"
             android:weightSum="2">
 
-            <!--text view for our course tracks-->
             <TextView
                 android:id="@+id/idReminderPlace"
                 android:layout_width="0dp"
@@ -42,17 +41,16 @@
                 android:textColor="@color/black" />
 
 
-            <!--text view for our course duration-->
 
 
         </LinearLayout>
 
-        <!--text view for our course description-->
         <TextView
             android:id="@+id/idLatitude"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="#DFDFEF"
             android:padding="3dp"
             android:text="Latitude"
             android:textColor="@color/black" />
