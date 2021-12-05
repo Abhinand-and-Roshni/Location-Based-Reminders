@@ -51,48 +51,26 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
     String lat1s, long1s;
     private DBHandler dbHandler;
 
-
     public void onBackPressed()
     {
-        AlertDialog.Builder builder
-                = new AlertDialog
-                .Builder(selectLocation.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(selectLocation.this);
         builder.setMessage("You will have to re-fill the form");
         builder.setTitle("Are you sure?");
         builder.setCancelable(false);
-        builder
-                .setPositiveButton(
-                        "Yes",
-                        new DialogInterface
-                                .OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which)
-                            {
-
-                                startActivity(new Intent(selectLocation.this,WelcomePage.class));
-                            }
-                        });
-
-        builder
-                .setNegativeButton(
-                        "No",
-                        new DialogInterface
-                                .OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which)
-                            {
-
-                                dialog.cancel();
-                            }
-                        });
-
-
+        builder.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                startActivity(new Intent(selectLocation.this,WelcomePage.class));
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog,int which){
+                dialog.cancel();
+            }
+        });
         AlertDialog alertDialog = builder.create();
-
         alertDialog.show();
     }
 
@@ -148,10 +126,9 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
                             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 5);
                             mGoogleMap.animateCamera(cameraUpdate);
                         }
-                    } catch (IOException e) {
+                    }catch (IOException e) {
                         e.printStackTrace();
                     }
-
                 }
             }
         });

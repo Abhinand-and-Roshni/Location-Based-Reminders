@@ -35,7 +35,7 @@ public class setName extends AppCompatActivity {
                 usersname=editName.getText().toString();
                 dbHandler.setUserName(SignUp.phone,usersname);
                 System.out.println("Name added!");
-                Toast.makeText(setName.this, "Logging into newly created account...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(setName.this, "Logging into newly created account.", Toast.LENGTH_SHORT).show();
                 Intent intent7= new Intent(setName.this,WelcomePage.class);
                 startActivity(intent7);
             }

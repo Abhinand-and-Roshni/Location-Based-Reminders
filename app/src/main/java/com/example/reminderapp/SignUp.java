@@ -106,13 +106,13 @@ public class SignUp extends AppCompatActivity {
                     }
                     else{
                         System.out.println("Record exists");
-                        Toast.makeText(SignUp.this, "ALREADY EXISTING RECORD! WELCOME BACK", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignUp.this, "Welcome back!", Toast.LENGTH_SHORT).show();
 
                         if(!dbHandler.checkUserName(phone)){
                             startActivity( new Intent(SignUp.this, setName.class));
                         }
                         else{
-                            Toast.makeText(SignUp.this, "Logging into existing account..", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUp.this, "Logging into existing account.", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(SignUp.this,WelcomePage.class));
                         }
 
@@ -120,7 +120,7 @@ public class SignUp extends AppCompatActivity {
 
                 }
                 else{
-                    Toast.makeText(SignUp.this, "INCORRECT OTP!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUp.this, "INVALID OTP!", Toast.LENGTH_SHORT).show();
                     editOTP.setText("");
 
                 }
@@ -167,8 +167,6 @@ public class SignUp extends AppCompatActivity {
             System.out.println(e);
 
         }
-
-
     };
 
     private void verifyCode(String code) {

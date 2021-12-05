@@ -144,9 +144,6 @@ public class DBHandler extends SQLiteOpenHelper {
         return false;
     }
 
-
-
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion<2)
