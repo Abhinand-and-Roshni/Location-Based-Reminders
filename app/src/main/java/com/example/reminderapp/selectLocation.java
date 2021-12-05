@@ -165,10 +165,10 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
         btn_add_rem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(et_rem.length() == 0){
+                if(et_rem.getText().toString().length() == 0){
                     Toast.makeText(selectLocation.this, "Enter valid reminder!", Toast.LENGTH_SHORT).show();
                 }
-                if(lat1s==null || long1s==null){
+                else if(lat1s==null || long1s==null){
                     Toast.makeText(selectLocation.this, "Please select a valid location", Toast.LENGTH_SHORT).show();
                 }
 
