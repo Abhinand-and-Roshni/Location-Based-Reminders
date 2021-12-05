@@ -4,4 +4,13 @@
     <string name="str_enter_location">Enter the location:</string>
     <string name="str_username">What would you liked to be called?</string>
     <string name="str_rem_title">What is the reminder you want to set?</string>
+    <string name="title_activity_reminder_records">reminderRecords</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>

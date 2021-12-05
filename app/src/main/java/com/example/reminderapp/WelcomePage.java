@@ -85,6 +85,15 @@ public class WelcomePage extends AppCompatActivity {
         btn_view_rem=findViewById(R.id.btn_view_rem);
         btn_logout=findViewById(R.id.btn_logout);
 
+
+        btn_view_rem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(WelcomePage.this, "VIEWING REMINDERS!!", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(WelcomePage.this,viewReminders.class));
+            }
+        });
+
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

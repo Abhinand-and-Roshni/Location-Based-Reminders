@@ -57,15 +57,9 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
         AlertDialog.Builder builder
                 = new AlertDialog
                 .Builder(selectLocation.this);
-
         builder.setMessage("You will have to re-fill the form");
-
         builder.setTitle("Are you sure?");
-
-
         builder.setCancelable(false);
-
-
         builder
                 .setPositiveButton(
                         "Yes",

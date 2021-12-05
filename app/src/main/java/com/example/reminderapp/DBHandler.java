@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
 public class DBHandler extends SQLiteOpenHelper {
 
     public static final String DB_NAME ="info_users";
@@ -38,6 +40,22 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
     }
+
+    public ArrayList<reminderDetails> readReminders()
+    {
+        SQLiteDatabase db=this.getReadableDatabase();
+        String MY_QUERY= "SELECT REMINDER_NAME, PLACE_NAME, LATITUDE, LONGITUDE FROM USERS U INNER JOIN REMINDERS R ON U.PHONE_NO=R.PHONE_NO WHERE R.PHONE_NO=?";
+        Cursor cursorReminders=db.rawQuery(MY_QUERY,new String[]{SignUp.phone});
+        ArrayList<reminderDetails> reminderDetailsArrayList=new ArrayList<>();
+        if(cursorReminders.moveToFirst()){
+            do {
+                reminderDetailsArrayList.add(new reminderDetails(cursorReminders.getString(0), cursorReminders.getString(1), cursorReminders.getString(2), cursorReminders.getString(3)));
+            }while(cursorReminders.moveToNext());
+            }
+        cursorReminders.close();
+        return reminderDetailsArrayList;
+    }
+
 
     public void addReminderRecord(String remname,String remplace, String latitude, String longitude)
     {
