@@ -28,6 +28,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -50,6 +51,7 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
     double lat1, long1;
     String lat1s, long1s;
     private DBHandler dbHandler;
+    Marker mHere;
 
     public void onBackPressed()
     {
@@ -119,10 +121,14 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
                             long1s = Double.toString(long1); //for toast msg
 
                             Toast.makeText(selectLocation.this, lat1s + " & " + long1s , Toast.LENGTH_SHORT).show();
+
+                            if(mHere!=null){
+                                mHere.remove();
+                            }
                             MarkerOptions markerOptions = new MarkerOptions();
                             markerOptions.title("Here");
                             markerOptions.position(latLng);
-                            mGoogleMap.addMarker(markerOptions);
+                            mHere = mGoogleMap.addMarker(markerOptions);
                             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 5);
                             mGoogleMap.animateCamera(cameraUpdate);
                         }

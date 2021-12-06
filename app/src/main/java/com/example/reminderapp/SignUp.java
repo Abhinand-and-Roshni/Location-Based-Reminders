@@ -141,8 +141,6 @@ public class SignUp extends AppCompatActivity {
         PhoneAuthProvider.verifyPhoneNumber(options);
     }
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
-
-
             mCallBack = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
 

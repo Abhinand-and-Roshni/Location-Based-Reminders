@@ -61,7 +61,7 @@
         android:layout_below="@id/idEdtOtp"
         android:layout_margin="10dp"
         android:layout_marginBottom="168dp"
-        android:text="Create Account"
+        android:text="@string/txt_proceed"
         android:textAllCaps="false"
         app:cornerRadius="100sp"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -22,7 +22,6 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String LONGITUDE="LONGITUDE";
     public static final String PLACE_NAME="PLACE_NAME";
 
-
     private static final String DATABASE_ALTER_REMINDERS = "ALTER TABLE "+TABLE_REMINDER+ " ADD COLUMN " + PLACE_NAME + " TEXT";
 
     public DBHandler(Context context)
@@ -30,14 +29,10 @@ public class DBHandler extends SQLiteOpenHelper {
         super(context,DB_NAME,null,DB_VERSION);
     }
 
-
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         String query="CREATE TABLE "+TABLE_NAME+" ("+PHONE_NO+" TEXT,"+USER_NAME+" TEXT)";
         db.execSQL(query);
-
-
 
     }
 
