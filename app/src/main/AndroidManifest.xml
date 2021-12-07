@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.reminderapp">
+    package="com.example.reminderapp" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -15,8 +15,10 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MaterialComponents.Light.NoActionBar">
-        <activity android:name=".viewReminders"></activity>
+        android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" >
+        <activity android:name=".deleteActivity" >
+        </activity>
+        <activity android:name=".viewReminders" />
         <activity android:name=".reminderRecords" />
         <activity
             android:name=".selectLocation"
@@ -28,7 +30,7 @@
         <activity android:name=".SignUp" />
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -36,6 +36,13 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
+    public void deleteReminder(String remName) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_REMINDER, "REMINDER_NAME=? AND PHONE_NO=?", new String[]{remName,SignUp.phone});
+        db.close();
+    }
+
     public ArrayList<reminderDetails> readReminders()
     {
         SQLiteDatabase db=this.getReadableDatabase();

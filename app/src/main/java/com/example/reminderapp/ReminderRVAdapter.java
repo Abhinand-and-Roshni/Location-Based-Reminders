@@ -1,6 +1,7 @@
 package com.example.reminderapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.ViewGroup;
 import android.view.View;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ public class ReminderRVAdapter extends RecyclerView.Adapter<ReminderRVAdapter.Vi
         this.context = context;
     }
 
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -36,7 +38,25 @@ public class ReminderRVAdapter extends RecyclerView.Adapter<ReminderRVAdapter.Vi
         holder.reminderPlaceTV.setText("Location: "+modal.getReminderLocation());
         holder.latitudeTV.setText("Latitude: "+modal.getLatitude());
         holder.longitudeTV.setText("Longitude: "+modal.getLongitude());
+
+
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, deleteActivity.class);
+
+                i.putExtra("Reminder Name", modal.getReminderName());
+                i.putExtra("Location", modal.getReminderLocation());
+                i.putExtra("Latitude", modal.getLatitude());
+                i.putExtra("Longitude", modal.getLongitude());
+
+                context.startActivity(i);
+            }
+        });
     }
+
+
 
     @Override
     public int getItemCount() {
