@@ -73,6 +73,7 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
     double lat1, long1; //marker dropped
     double lat2, long2; //current loc
     String lat1s, long1s;
+    String str_loc;
     private DBHandler dbHandler;
     Marker mHere;
     LocationManager locationManager;
@@ -146,8 +147,6 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
 
         if (ActivityCompat.checkSelfPermission(selectLocation.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(selectLocation.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(selectLocation.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
-        } else {
-            Toast.makeText(selectLocation.this, "Device did not grant permission!", Toast.LENGTH_SHORT).show();
         } // required for location manager
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) selectLocation.this);
 
@@ -190,8 +189,18 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
 
                             lat1s = Double.toString(lat1); //for toast msg
                             long1s = Double.toString(long1); //for toast msg
-
-                            Toast.makeText(selectLocation.this, lat1s + " & " + long1s, Toast.LENGTH_SHORT).show();
+                            Geocoder geocoder2 = new Geocoder(selectLocation.this, Locale.getDefault());
+                            try{
+                                List<Address>addressList1 = geocoder2.getFromLocation(lat1, long1,1);
+                                if(addressList1.size()>0){
+                                    str_loc = et_location.getText().toString() + " " + addressList1.get(0).getThoroughfare() + " " + addressList1.get(0).getSubThoroughfare() + " " + addressList1.get(0).getLocality() + " " + addressList1.get(0).getSubLocality() + " " + addressList1.get(0).getFeatureName()  + " " + addressList1.get(0).getCountryName() + " " + addressList1.get(0).getPostalCode();
+                                    Toast.makeText(selectLocation.this, str_loc, Toast.LENGTH_SHORT).show();
+                                }
+                            }catch(Exception e){
+                                e.printStackTrace();
+                                Toast.makeText(selectLocation.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                            }
+                            //Toast.makeText(selectLocation.this, lat1s + " & " + long1s, Toast.LENGTH_SHORT).show();
 
                             if (mHere != null) {
                                 mHere.remove();
@@ -221,7 +230,7 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
 
                 //code for adding details to database table - user's reminder
                 else {
-                    dbHandler.addReminderRecord(et_rem.getText().toString(), et_location.getText().toString(), lat1s, long1s);
+                    dbHandler.addReminderRecord(et_rem.getText().toString(), str_loc, lat1s, long1s);
                     Toast.makeText(selectLocation.this, "Reminder stored", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(selectLocation.this, WelcomePage.class));
 
