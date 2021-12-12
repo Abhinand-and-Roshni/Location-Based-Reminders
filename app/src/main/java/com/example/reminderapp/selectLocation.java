@@ -3,15 +3,30 @@ package com.example.reminderapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
@@ -41,34 +56,39 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class selectLocation extends AppCompatActivity implements OnMapReadyCallback {
+public class selectLocation extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
 
     boolean isPermissionGranted;
     GoogleMap mGoogleMap;
     ImageView img_search_icon;
     EditText et_location, et_rem;
     Button btn_add_rem;
-    double lat1, long1;
+    double lat1, long1; //marker dropped
+    double lat2, long2; //current loc
     String lat1s, long1s;
     private DBHandler dbHandler;
     Marker mHere;
+    LocationManager locationManager;
+    public float distance[];
+    Cursor cursor;
+    NotificationManager mNotificationManager;
+    NotificationCompat.Builder notificationBuilder;
 
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(selectLocation.this);
         builder.setMessage("You will have to re-fill the form");
         builder.setTitle("Are you sure?");
         builder.setCancelable(false);
         builder.setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which){
-                startActivity(new Intent(selectLocation.this,WelcomePage.class));
-            }
-        });
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(selectLocation.this, WelcomePage.class));
+                    }
+                });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog,int which){
+            public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
@@ -80,38 +100,67 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_location);
+        distance = new float[2];
+        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        String NOTIFICATION_CHANNEL_ID="my_channel_id_01";
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "My Notifications", mNotificationManager.IMPORTANCE_HIGH);
+
+            notificationChannel.setDescription("Channel description");
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
+            notificationChannel.enableVibration(true);
+            mNotificationManager.createNotificationChannel(notificationChannel);
+        }
+
+
+
+        notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        if (ActivityCompat.checkSelfPermission(selectLocation.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(selectLocation.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(selectLocation.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
+        } else {
+            Toast.makeText(selectLocation.this, "Device did not grant permission!", Toast.LENGTH_SHORT).show();
+        } // required for location manager
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) selectLocation.this);
 
         img_search_icon = findViewById(R.id.img_search_icon);
         et_location = findViewById(R.id.et_location); //USER SPECIFIED LOCATION (dont store in db - only store long and lat)
         et_rem = findViewById(R.id.et_rem); //USER SPECIFIED REMINDER
         btn_add_rem = findViewById(R.id.btn_add_rem);
 
-        dbHandler= new DBHandler(selectLocation.this);
+        dbHandler = new DBHandler(selectLocation.this);
 
 
         checkMyPermissions(); //location settings permission (access or deny)
 
-        if(isPermissionGranted){
-            if(checkGooglePlayServices()){
+        if (isPermissionGranted) {
+            if (checkGooglePlayServices()) {
                 Toast.makeText(this, "Google PlayServices are available", Toast.LENGTH_SHORT).show();
                 SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.frag_map);
                 supportMapFragment.getMapAsync(this);
-            }else{
+            } else {
                 Toast.makeText(this, "Google PlayServices are not available", Toast.LENGTH_SHORT).show();
             }
         }
+
 
         img_search_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String location = et_location.getText().toString();
-                if(location == null){
+                if (location == null) {
                     Toast.makeText(selectLocation.this, "Type a valid location!", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     Geocoder geocoder = new Geocoder(selectLocation.this, Locale.getDefault());
                     try {
-                        List<Address> listAddress = geocoder.getFromLocationName(location,1 );
-                        if(listAddress.size()>0){
+                        List<Address> listAddress = geocoder.getFromLocationName(location, 1);
+                        if (listAddress.size() > 0) {
                             LatLng latLng = new LatLng(listAddress.get(0).getLatitude(), listAddress.get(0).getLongitude());
 
                             lat1 = listAddress.get(0).getLatitude(); //LATITUDE OF THE REMINDER LOCATION
@@ -120,9 +169,9 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
                             lat1s = Double.toString(lat1); //for toast msg
                             long1s = Double.toString(long1); //for toast msg
 
-                            Toast.makeText(selectLocation.this, lat1s + " & " + long1s , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(selectLocation.this, lat1s + " & " + long1s, Toast.LENGTH_SHORT).show();
 
-                            if(mHere!=null){
+                            if (mHere != null) {
                                 mHere.remove();
                             }
                             MarkerOptions markerOptions = new MarkerOptions();
@@ -132,7 +181,7 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
                             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 5);
                             mGoogleMap.animateCamera(cameraUpdate);
                         }
-                    }catch (IOException e) {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
@@ -142,18 +191,18 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
         btn_add_rem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(et_rem.getText().toString().length() == 0){
+                if (et_rem.getText().toString().length() == 0) {
                     Toast.makeText(selectLocation.this, "Enter valid reminder!", Toast.LENGTH_SHORT).show();
-                }
-                else if(lat1s==null || long1s==null){
+                } else if (lat1s == null || long1s == null) {
                     Toast.makeText(selectLocation.this, "Please select a valid location", Toast.LENGTH_SHORT).show();
                 }
 
                 //code for adding details to database table - user's reminder
-                else{
-                    dbHandler.addReminderRecord(et_rem.getText().toString(),et_location.getText().toString(),lat1s,long1s);
-                    Toast.makeText(selectLocation.this, "Record added ! thank you!", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(selectLocation.this,WelcomePage.class));
+                else {
+                    dbHandler.addReminderRecord(et_rem.getText().toString(), et_location.getText().toString(), lat1s, long1s);
+                    Toast.makeText(selectLocation.this, "Reminder stored", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(selectLocation.this, WelcomePage.class));
+
                 }
             }
         });
@@ -214,4 +263,40 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
     }
 
 
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        lat2 = location.getLatitude(); //current lat
+        long2 = location.getLongitude(); //current long
+
+//        selectLocation.ConnectMySql connectMySql = new selectLocation.ConnectMySQL();
+//        connectMySql.execute("");
+
+
+
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull List<Location> locations) {
+
+    }
+
+    @Override
+    public void onFlushComplete(int requestCode) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(@NonNull String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(@NonNull String provider) {
+
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
 }
