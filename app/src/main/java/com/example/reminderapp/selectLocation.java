@@ -1,16 +1,23 @@
 package com.example.reminderapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -22,11 +29,20 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.ResultCallbacks;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -41,7 +57,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class selectLocation extends AppCompatActivity implements OnMapReadyCallback {
+public class selectLocation extends AppCompatActivity implements OnMapReadyCallback, LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener, ResultCallback<Status> {
 
     boolean isPermissionGranted;
     GoogleMap mGoogleMap;
@@ -53,22 +69,21 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
     private DBHandler dbHandler;
     Marker mHere;
 
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         AlertDialog.Builder builder = new AlertDialog.Builder(selectLocation.this);
         builder.setMessage("You will have to re-fill the form");
         builder.setTitle("Are you sure?");
         builder.setCancelable(false);
         builder.setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which){
-                startActivity(new Intent(selectLocation.this,WelcomePage.class));
-            }
-        });
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(selectLocation.this, WelcomePage.class));
+                    }
+                });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog,int which){
+            public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
@@ -86,17 +101,17 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
         et_rem = findViewById(R.id.et_rem); //USER SPECIFIED REMINDER
         btn_add_rem = findViewById(R.id.btn_add_rem);
 
-        dbHandler= new DBHandler(selectLocation.this);
+        dbHandler = new DBHandler(selectLocation.this);
 
 
         checkMyPermissions(); //location settings permission (access or deny)
 
-        if(isPermissionGranted){
-            if(checkGooglePlayServices()){
+        if (isPermissionGranted) {
+            if (checkGooglePlayServices()) {
                 Toast.makeText(this, "Google PlayServices are available", Toast.LENGTH_SHORT).show();
                 SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.frag_map);
                 supportMapFragment.getMapAsync(this);
-            }else{
+            } else {
                 Toast.makeText(this, "Google PlayServices are not available", Toast.LENGTH_SHORT).show();
             }
         }
@@ -105,13 +120,13 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
             @Override
             public void onClick(View v) {
                 String location = et_location.getText().toString();
-                if(location == null){
+                if (location == null) {
                     Toast.makeText(selectLocation.this, "Type a valid location!", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     Geocoder geocoder = new Geocoder(selectLocation.this, Locale.getDefault());
                     try {
-                        List<Address> listAddress = geocoder.getFromLocationName(location,1 );
-                        if(listAddress.size()>0){
+                        List<Address> listAddress = geocoder.getFromLocationName(location, 1);
+                        if (listAddress.size() > 0) {
                             LatLng latLng = new LatLng(listAddress.get(0).getLatitude(), listAddress.get(0).getLongitude());
 
                             lat1 = listAddress.get(0).getLatitude(); //LATITUDE OF THE REMINDER LOCATION
@@ -120,9 +135,9 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
                             lat1s = Double.toString(lat1); //for toast msg
                             long1s = Double.toString(long1); //for toast msg
 
-                            Toast.makeText(selectLocation.this, lat1s + " & " + long1s , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(selectLocation.this, lat1s + " & " + long1s, Toast.LENGTH_SHORT).show();
 
-                            if(mHere!=null){
+                            if (mHere != null) {
                                 mHere.remove();
                             }
                             MarkerOptions markerOptions = new MarkerOptions();
@@ -132,7 +147,7 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
                             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 5);
                             mGoogleMap.animateCamera(cameraUpdate);
                         }
-                    }catch (IOException e) {
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
@@ -142,19 +157,71 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
         btn_add_rem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(et_rem.getText().toString().length() == 0){
+                if (et_rem.getText().toString().length() == 0) {
                     Toast.makeText(selectLocation.this, "Enter valid reminder!", Toast.LENGTH_SHORT).show();
-                }
-                else if(lat1s==null || long1s==null){
+                } else if (lat1s == null || long1s == null) {
                     Toast.makeText(selectLocation.this, "Please select a valid location", Toast.LENGTH_SHORT).show();
                 }
 
                 //code for adding details to database table - user's reminder
-                else{
-                    dbHandler.addReminderRecord(et_rem.getText().toString(),et_location.getText().toString(),lat1s,long1s);
-                    Toast.makeText(selectLocation.this, "Record added ! thank you!", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(selectLocation.this,WelcomePage.class));
+                else {
+                    dbHandler.addReminderRecord(et_rem.getText().toString(), et_location.getText().toString(), lat1s, long1s);
+                    Toast.makeText(selectLocation.this, "Reminder has been added", Toast.LENGTH_SHORT).show();
+                    startGeoFence();
+                    startActivity(new Intent(selectLocation.this, WelcomePage.class));
                 }
+            }
+
+            GeofencingRequest geofencingRequest;
+
+            public void startGeoFence() {
+                Geofence geofence = createGeofence(mHere.getPosition(), 500f);
+                geofencingRequest = createGeoRequest(geofence);
+                addGeoFence(geofence);
+
+            }
+
+            GoogleApiClient googleApiClient;
+
+            private void addGeoFence(Geofence geofence) {
+                if (ActivityCompat.checkSelfPermission(selectLocation.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                LocationServices.GeofencingApi.addGeofences(googleApiClient, geofencingRequest, createGeofencingPendingIntent())
+                        .setResultCallback(selectLocation.this);
+            }
+            PendingIntent geoFencePendingIntent;
+            private PendingIntent createGeofencingPendingIntent() {
+                if(geoFencePendingIntent!=null){
+                    return geoFencePendingIntent;
+                }
+
+                Intent i = new Intent(selectLocation.this, GeofenceTransitionService.class);
+                return PendingIntent.getService(selectLocation.this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            }
+
+            private GeofencingRequest createGeoRequest(Geofence geofence) {
+                return new GeofencingRequest.Builder()
+                        .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+                        .addGeofence(geofence)
+                        .build();
+            }
+
+            private Geofence createGeofence(LatLng position, float v) {
+                return new Geofence.Builder()
+                        .setRequestId("New GeoFence")
+                        .setCircularRegion(lat1, long1, v)
+                        .setExpirationDuration(600000)
+                        .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
+                        .build();
             }
         });
 
@@ -207,6 +274,10 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mGoogleMap = googleMap;
+
+        //mGoogleMap.setOnMarkerClickListener(this);
+        //mGoogleMap.setOnMapClickListener(this);
+
         mGoogleMap.setMyLocationEnabled(true);
         mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
 
@@ -214,4 +285,53 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
     }
 
 
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onMapClick(@NonNull LatLng latLng) {
+
+    }
+
+    @Override
+    public boolean onMarkerClick(@NonNull Marker marker) {
+        return false;
+    }
+
+    @Override
+    public void onResult(@NonNull Status status) {
+        drawGeofence();
+    }
+    Circle geoFenceLimits;
+    private void drawGeofence() {
+        if(geoFenceLimits!=null){
+            geoFenceLimits.remove();
+        }
+
+        CircleOptions circleOptions = new CircleOptions()
+                .center(mHere.getPosition())
+                .strokeColor(Color.argb(50,70,70,70))
+                .fillColor(Color.argb(100,150,150,150))
+                .radius(500f);
+
+        geoFenceLimits = mGoogleMap.addCircle(circleOptions);
+
+    }
 }
