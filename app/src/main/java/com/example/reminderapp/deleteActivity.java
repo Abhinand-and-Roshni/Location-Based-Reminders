@@ -55,7 +55,7 @@ public class deleteActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which){
                                 dbHandler.deleteReminder(remName);
                                 Toast.makeText(deleteActivity.this, "Reminder deleted!", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(deleteActivity.this,WelcomePage.class));
+                                startActivity(new Intent(deleteActivity.this,viewReminders.class));
                             }
                         });
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
