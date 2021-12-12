@@ -54,10 +54,9 @@ public class DBHandler extends SQLiteOpenHelper {
             do{
                 Location.distanceBetween(lat2,long2,Double.parseDouble(cursorNeeded.getString(0)),Double.parseDouble(cursorNeeded.getString(1)),WelcomePage.distance);
                 if(WelcomePage.distance[0]<=1000)
-
                 {
                     answer_needed=true;
-                    WelcomePage.showToasts="You are in the location of "+cursorNeeded.getString(2).toString();
+                    WelcomePage.showToasts="You are in the location of the '"+cursorNeeded.getString(2).toString() +"' reminder!";
                     String remName=cursorNeeded.getString(2);
                     deleteReminder(remName);
                     break;
@@ -97,7 +96,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(LATITUDE,latitude);
         values.put(LONGITUDE,longitude);
         db.insert(TABLE_REMINDER,null,values);
-        System.out.println("Records added..");
+        System.out.println("Records added");
         db.close();
     }
 
@@ -108,7 +107,7 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values=new ContentValues();
         values.put(PHONE_NO,phone);
         db.insert(TABLE_NAME,null,values);
-        System.out.println("Records added..");
+        System.out.println("Records added");
         db.close();
     }
 

@@ -121,13 +121,17 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
 
         if (isPermissionGranted) {
             if (checkGooglePlayServices()) {
-                Toast.makeText(this, "Google PlayServices are available", Toast.LENGTH_SHORT).show();
+                System.out.println("Google Play Services are available.");
+                //Toast.makeText(this, "Google PlayServices are available", Toast.LENGTH_SHORT).show();
                 SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.frag_map);
                 supportMapFragment.getMapAsync(this);
             } else {
-                Toast.makeText(this, "Google PlayServices are not available", Toast.LENGTH_SHORT).show();
+                System.err.println("Google Play Services are not available.");
+                //Toast.makeText(this, "Google PlayServices are not available", Toast.LENGTH_SHORT).show();
             }
         }
+
+        //actions for after search button for location is clicked
         img_search_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,7 +155,7 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
                                 List<Address>addressList1 = geocoder2.getFromLocation(lat1, long1,1);
                                 if(addressList1.size()>0){
                                     str_loc = et_location.getText().toString() + " " + addressList1.get(0).getThoroughfare() + " " + addressList1.get(0).getSubThoroughfare() + " " + addressList1.get(0).getLocality() + " " + addressList1.get(0).getSubLocality() + " " + addressList1.get(0).getFeatureName()  + " " + addressList1.get(0).getCountryName() + " " + addressList1.get(0).getPostalCode();
-                                    Toast.makeText(selectLocation.this, str_loc, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(selectLocation.this, "You have entered the location: " + str_loc, Toast.LENGTH_SHORT).show();
                                 }
                             }catch(Exception e){
                                 e.printStackTrace();
@@ -176,6 +180,7 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
             }
         });
 
+        //actions for after reminder + button is clicked
         btn_add_rem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -188,15 +193,13 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
                 //code for adding details to database table - user's reminder
                 else {
                     dbHandler.addReminderRecord(et_rem.getText().toString(), str_loc, lat1s, long1s);
-                    Toast.makeText(selectLocation.this, "Reminder stored", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(selectLocation.this, "Reminder has been saved", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(selectLocation.this, WelcomePage.class));
 
                 }
             }
         });
-
     }
-
     private boolean checkGooglePlayServices() {
         GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
         int result = googleApiAvailability.isGooglePlayServicesAvailable(this);
@@ -213,14 +216,13 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
         }
         return false;
     }
-
-
     private void checkMyPermissions() {
         Dexter.withContext(this).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(new PermissionListener() {
             @Override
             public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
                 isPermissionGranted = true;
-                Toast.makeText(selectLocation.this, "Location Permission Granted", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(selectLocation.this, "Location Permission Granted", Toast.LENGTH_SHORT).show();
+                System.out.println("Location permissions were granted by user.");
             }
 
             @Override

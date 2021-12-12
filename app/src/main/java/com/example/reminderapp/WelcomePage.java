@@ -103,10 +103,11 @@ public class WelcomePage extends AppCompatActivity implements LocationListener {
 
         if (isPermissionGranted) {
             if (checkGooglePlayServices()) {
-                Toast.makeText(this, "Google PlayServices are available", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Google PlayServices are available", Toast.LENGTH_SHORT).show();
                 SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.frag_map);
             } else {
-                Toast.makeText(this, "Google PlayServices are not available", Toast.LENGTH_SHORT).show();
+                System.err.println("Google play services are not available!");
+                //Toast.makeText(this, "Google PlayServices are not available", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -131,7 +132,7 @@ public class WelcomePage extends AppCompatActivity implements LocationListener {
         btn_view_rem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(WelcomePage.this, "VIEWING REMINDERS!!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(WelcomePage.this, "VIEWING REMINDERS!!", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(WelcomePage.this,viewReminders.class));
             }
         });
@@ -147,7 +148,7 @@ public class WelcomePage extends AppCompatActivity implements LocationListener {
                     @Override
                     public void onClick(DialogInterface dialog,int which){
                         startActivity(new Intent(WelcomePage.this, MainActivity.class));
-                        Toast.makeText(WelcomePage.this, "Logged out!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(WelcomePage.this, "User logged out.", Toast.LENGTH_SHORT).show();
                     }
                 });
                 builder.setNegativeButton("No",
@@ -166,7 +167,7 @@ public class WelcomePage extends AppCompatActivity implements LocationListener {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(WelcomePage.this, selectLocation.class));
-                Toast.makeText(WelcomePage.this, "Create reminder selected", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(WelcomePage.this, "Create reminder selected", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -181,7 +182,8 @@ public class WelcomePage extends AppCompatActivity implements LocationListener {
             Dialog dialog = googleApiAvailability.getErrorDialog(this, result, 201, new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
-                    Toast.makeText(WelcomePage.this, "User cancelled", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(WelcomePage.this, "User cancelled", Toast.LENGTH_SHORT).show();
+                    System.out.println("User cancelled action.");
                 }
             });
             dialog.show();
@@ -194,7 +196,8 @@ public class WelcomePage extends AppCompatActivity implements LocationListener {
             @Override
             public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
                 isPermissionGranted = true;
-                Toast.makeText(WelcomePage.this, "Location Permission Granted", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(WelcomePage.this, "Location Permission Granted", Toast.LENGTH_SHORT).show();
+                System.out.println("Location permissions have been granted");
             }
 
             @Override
@@ -223,8 +226,6 @@ public class WelcomePage extends AppCompatActivity implements LocationListener {
             System.out.println("Location changed function called!");
 
             //Toast.makeText(this, "location changed a bit", Toast.LENGTH_SHORT).show();
-
-
             boolean answer_needed=dbHandler.checkIfInRange(lat2,long2);
 
             if(answer_needed==true) {
@@ -234,12 +235,12 @@ public class WelcomePage extends AppCompatActivity implements LocationListener {
                         .setWhen(System.currentTimeMillis())
                         .setSmallIcon(R.drawable.ic_launcher_foreground)
                         .setTicker("Hearty365")
-                        .setContentTitle("REMINDER FOR "+usersname)
+                        .setContentTitle("Hey, "+usersname + ". You have a reminder!")
                         .setContentText(showToasts)
                         .setContentInfo("Info");
                 mNotificationManager.notify(1, notificationBuilder.build());
 
-                Toast.makeText(this, "Reminder notification sent!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Reminder notification sent!", Toast.LENGTH_SHORT).show();
             }
         }
     }

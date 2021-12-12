@@ -94,7 +94,7 @@ public class SignUp extends AppCompatActivity {
                     editOTP.setText("");
                     editPhone.setText("");
 
-                    Toast.makeText(SignUp.this, "CORRECT CREDENTIAL", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(SignUp.this, "CORRECT CREDENTIAL", Toast.LENGTH_SHORT).show();
 
 
                     if(!dbHandler.checkRecord(phone)) {
@@ -106,13 +106,13 @@ public class SignUp extends AppCompatActivity {
                     }
                     else{
                         System.out.println("Record exists");
-                        Toast.makeText(SignUp.this, "Welcome back!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(SignUp.this, "Logging into existing account.", Toast.LENGTH_SHORT).show();
 
                         if(!dbHandler.checkUserName(phone)){
                             startActivity( new Intent(SignUp.this, setName.class));
                         }
                         else{
-                            Toast.makeText(SignUp.this, "Logging into existing account.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignUp.this, "Welcome back!", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(SignUp.this,WelcomePage.class));
                         }
 
@@ -120,9 +120,8 @@ public class SignUp extends AppCompatActivity {
 
                 }
                 else{
-                    Toast.makeText(SignUp.this, "INVALID OTP!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUp.this, "Invalid OTP!", Toast.LENGTH_SHORT).show();
                     editOTP.setText("");
-
                 }
 
             }
@@ -142,7 +141,6 @@ public class SignUp extends AppCompatActivity {
     }
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks
             mCallBack = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-
 
         @Override
         public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
