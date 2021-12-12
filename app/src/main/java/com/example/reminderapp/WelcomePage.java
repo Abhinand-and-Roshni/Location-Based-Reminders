@@ -234,7 +234,7 @@ public class WelcomePage extends AppCompatActivity implements LocationListener {
                         .setWhen(System.currentTimeMillis())
                         .setSmallIcon(R.drawable.ic_launcher_foreground)
                         .setTicker("Hearty365")
-                        .setContentTitle("REMINDER ALERT!")
+                        .setContentTitle("REMINDER FOR "+usersname)
                         .setContentText(showToasts)
                         .setContentInfo("Info");
                 mNotificationManager.notify(1, notificationBuilder.build());
