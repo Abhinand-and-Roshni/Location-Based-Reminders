@@ -13,6 +13,8 @@ public class MainActivity extends AppCompatActivity {
     TextView tv_welcome;
     Button bt_signups;
 
+
+
     @Override
     public void onBackPressed()
     {
@@ -30,6 +32,11 @@ public class MainActivity extends AppCompatActivity {
 
         tv_welcome=findViewById(R.id.tv_welcome);
         bt_signups=findViewById(R.id.bt_signups);
+
+        if(SaveSharedPreference.getPhoneNo(MainActivity.this).length() != 0)
+        {
+            startActivity(new Intent(MainActivity.this,WelcomePage.class));
+        }
 
 
 

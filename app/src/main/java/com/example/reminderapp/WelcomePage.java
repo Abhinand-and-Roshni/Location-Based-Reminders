@@ -1,6 +1,7 @@
 package com.example.reminderapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -11,6 +12,7 @@ import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,6 +24,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +41,8 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+
+import java.util.List;
 
 public class WelcomePage extends AppCompatActivity implements LocationListener {
 
@@ -71,7 +76,7 @@ public class WelcomePage extends AppCompatActivity implements LocationListener {
         dbHandler= new DBHandler(WelcomePage.this);
 
 
-        usersname=dbHandler.findUserName(SignUp.phone);
+        usersname=dbHandler.findUserName(SaveSharedPreference.getPhoneNo(WelcomePage.this));
         helloUserView=findViewById(R.id.helloUserView);
         helloUserView.setText("Hey there, "+usersname + "!");
 
@@ -148,6 +153,7 @@ public class WelcomePage extends AppCompatActivity implements LocationListener {
                     @Override
                     public void onClick(DialogInterface dialog,int which){
                         startActivity(new Intent(WelcomePage.this, MainActivity.class));
+                        SaveSharedPreference.clearPhoneNo(WelcomePage.this);
                         Toast.makeText(WelcomePage.this, "User logged out.", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -226,7 +232,7 @@ public class WelcomePage extends AppCompatActivity implements LocationListener {
             System.out.println("Location changed function called!");
 
             //Toast.makeText(this, "location changed a bit", Toast.LENGTH_SHORT).show();
-            boolean answer_needed=dbHandler.checkIfInRange(lat2,long2);
+            boolean answer_needed=dbHandler.checkIfInRange(lat2,long2,SaveSharedPreference.getPhoneNo(WelcomePage.this));
 
             if(answer_needed==true) {
 
@@ -244,4 +250,6 @@ public class WelcomePage extends AppCompatActivity implements LocationListener {
             }
         }
     }
+
+
 }

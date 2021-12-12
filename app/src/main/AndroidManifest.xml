@@ -23,7 +23,10 @@
         <activity
             android:name=".selectLocation"
             android:exported="false" />
-        <activity android:name=".WelcomePage" />
+        <activity
+            android:name=".WelcomePage" >
+
+        </activity>
         <activity
             android:name=".setName"
             android:exported="false" />
@@ -36,6 +39,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <meta-data

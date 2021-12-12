@@ -37,19 +37,19 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
-    public void deleteReminder(String remName) {
+    public void deleteReminder(String remName, String phonenos) {
 
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_REMINDER, "REMINDER_NAME=? AND PHONE_NO=?", new String[]{remName,SignUp.phone});
+        db.delete(TABLE_REMINDER, "REMINDER_NAME=? AND PHONE_NO=?", new String[]{remName,phonenos});
         db.close();
     }
 
-    public boolean checkIfInRange(double lat2, double long2)
+    public boolean checkIfInRange(double lat2, double long2, String phonenos)
     {
         SQLiteDatabase db=this.getReadableDatabase();
         boolean answer_needed=false;
         String query_needed="SELECT LATITUDE, LONGITUDE, REMINDER_NAME FROM USERS U INNER JOIN REMINDERS R ON U.PHONE_NO=R.PHONE_NO WHERE R.PHONE_NO=?";
-        Cursor cursorNeeded=db.rawQuery(query_needed,new String[]{SignUp.phone});
+        Cursor cursorNeeded=db.rawQuery(query_needed,new String[]{phonenos});
         if(cursorNeeded.moveToFirst()){
             do{
                 Location.distanceBetween(lat2,long2,Double.parseDouble(cursorNeeded.getString(0)),Double.parseDouble(cursorNeeded.getString(1)),WelcomePage.distance);
@@ -58,7 +58,7 @@ public class DBHandler extends SQLiteOpenHelper {
                     answer_needed=true;
                     WelcomePage.showToasts="You are in the location of the '"+cursorNeeded.getString(2).toString() +"' reminder!";
                     String remName=cursorNeeded.getString(2);
-                    deleteReminder(remName);
+                    deleteReminder(remName, phonenos);
                     break;
                 }
 
@@ -70,11 +70,11 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList<reminderDetails> readReminders()
+    public ArrayList<reminderDetails> readReminders(String phonenos)
     {
         SQLiteDatabase db=this.getReadableDatabase();
         String MY_QUERY= "SELECT REMINDER_NAME, PLACE_NAME, LATITUDE, LONGITUDE FROM USERS U INNER JOIN REMINDERS R ON U.PHONE_NO=R.PHONE_NO WHERE R.PHONE_NO=?";
-        Cursor cursorReminders=db.rawQuery(MY_QUERY,new String[]{SignUp.phone});
+        Cursor cursorReminders=db.rawQuery(MY_QUERY,new String[]{phonenos});
         ArrayList<reminderDetails> reminderDetailsArrayList=new ArrayList<>();
         if(cursorReminders.moveToFirst()){
             do {
@@ -86,11 +86,11 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
 
-    public void addReminderRecord(String remname,String remplace, String latitude, String longitude)
+    public void addReminderRecord(String remname,String remplace, String latitude, String longitude, String phonenos)
     {
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues values=new ContentValues();
-        values.put(PHONE_NO,SignUp.phone);
+        values.put(PHONE_NO,phonenos);
         values.put(REMINDER_NAME,remname);
         values.put(PLACE_NAME,remplace);
         values.put(LATITUDE,latitude);

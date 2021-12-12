@@ -55,6 +55,7 @@ public class SignUp extends AppCompatActivity {
                 System.out.println("Phone number entered..");
                 if(editPhone.length()==10){
                     phone="+91"+editPhone.getText().toString();
+                    SaveSharedPreference.setPhoneNo(SignUp.this,phone);
                     sendVerificationCode(phone);
                 }
                 else{

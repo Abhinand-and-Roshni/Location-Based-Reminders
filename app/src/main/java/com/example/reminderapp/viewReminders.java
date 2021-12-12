@@ -29,7 +29,7 @@ public class viewReminders extends AppCompatActivity {
         reminderDetailsArrayList=new ArrayList<>();
         dbHandler=new DBHandler(viewReminders.this);
 
-        reminderDetailsArrayList=dbHandler.readReminders();
+        reminderDetailsArrayList=dbHandler.readReminders(SaveSharedPreference.getPhoneNo(viewReminders.this));
         if(reminderDetailsArrayList.isEmpty()){
             txt_empty.setText("Nothing to see here.\nAdd a reminder first!");
             //Toast.makeText(viewReminders.this, "Add a reminder first :)", Toast.LENGTH_SHORT).show();

@@ -53,7 +53,7 @@ public class deleteActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which){
-                                dbHandler.deleteReminder(remName);
+                                dbHandler.deleteReminder(remName,SaveSharedPreference.getPhoneNo(deleteActivity.this));
                                 Toast.makeText(deleteActivity.this, "Reminder deleted!", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(deleteActivity.this,viewReminders.class));
                             }
