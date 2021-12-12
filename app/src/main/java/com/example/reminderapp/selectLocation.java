@@ -63,7 +63,7 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Locale;
 
-public class selectLocation extends AppCompatActivity implements OnMapReadyCallback, LocationListener {
+public class selectLocation extends AppCompatActivity implements OnMapReadyCallback{
 
     boolean isPermissionGranted;
     GoogleMap mGoogleMap;
@@ -78,9 +78,6 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
     Marker mHere;
     LocationManager locationManager;
     public float distance[];
-    Cursor cursor;
-    NotificationManager mNotificationManager;
-    NotificationCompat.Builder notificationBuilder;
 
     public String showToasts=" ";
 
@@ -112,44 +109,6 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
         setContentView(R.layout.activity_select_location);
         distance = new float[2];
 
-        //here /* code for notif only once*/
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        Notification compat = builder.build();
-        compat.flags = Notification.FLAG_ONLY_ALERT_ONCE;
-        //here /* code for notif only once*/
-
-
-        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        String NOTIFICATION_CHANNEL_ID="my_channel_id_01";
-
-
-
-
-
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "My Notifications", mNotificationManager.IMPORTANCE_HIGH);
-
-            notificationChannel.setDescription("Channel description");
-            notificationChannel.enableLights(true);
-            notificationChannel.setLightColor(Color.RED);
-            notificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
-            notificationChannel.enableVibration(true);
-            mNotificationManager.createNotificationChannel(notificationChannel);
-        }
-
-
-
-        notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        if (ActivityCompat.checkSelfPermission(selectLocation.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(selectLocation.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(selectLocation.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
-        } // required for location manager
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) selectLocation.this);
-
         img_search_icon = findViewById(R.id.img_search_icon);
         et_location = findViewById(R.id.et_location); //USER SPECIFIED LOCATION (dont store in db - only store long and lat)
         et_rem = findViewById(R.id.et_rem); //USER SPECIFIED REMINDER
@@ -169,8 +128,6 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
                 Toast.makeText(this, "Google PlayServices are not available", Toast.LENGTH_SHORT).show();
             }
         }
-
-
         img_search_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -292,126 +249,8 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
 
 
     }
-
-
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-        lat2 = location.getLatitude(); //current lat
-        long2 = location.getLongitude(); //current long
-
-//        selectLocation.ConnectMySql connectMySql = new selectLocation.ConnectMySQL();
-//        connectMySql.execute("");
-
-
-
-    }
-
-    private class ConnectToDB extends AsyncTask<String, Void, String>{
-        int i=1;
-        String resz = "";
-        String resz1 = "";
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.O)
-        @Override
-        protected String doInBackground(String... params) {
-            try {
-                showToasts=" ";
-                resz="";
-                resz1="";
-//                Class.forName("com.mysql.jdbc.Driver");
-                Connection con= DriverManager.getConnection(/*url,user,pass*/ "", "", "");
-//                System.out.println("Database connection success!");
-
-                String result="";
-                String result2="";
-              Statement st=con.createStatement();
-
-                String currentlat,currentlong;
-
-              ResultSet rs=st.executeQuery("SELECT `LATITUDE`, `LONGITUDE`, `USERNAME` FROM `info_users_table`");
-
-                ResultSetMetaData rsmd = rs.getMetaData();
-                while(rs.next())
-                {
-                    currentlat=rs.getString(1).toString();
-                    currentlong=rs.getString(2).toString();
-
-                    Location.distanceBetween(lat2,long2,lat1,lat1,distance);
-
-                    if(distance[0]<=1000)
-
-                    {
-                        //s=true;
-                        System.out.println("You are in the location of "+rs.getString(3).toString());
-
-                        showToasts="You are in the location of "+rs.getString(3).toString();
-                    }
-
-                    result+=(String.valueOf(i)+") "+rs.getString(1).toString()+ "\n");
-                    result2+=(String.valueOf(i)+") "+rs.getString(2).toString()+"\n");
-                    i++;
-                }
-                resz=result;
-                resz1=result2;
-
-
-            } catch(Exception e)
-            {
-                e.printStackTrace();
-                resz=e.toString();
-            }
-            return resz;
-        }
-
-
-        @Override
-        protected void onPostExecute(String s) {
-
-            if(showToasts!=" ") {
-                Toast.makeText(selectLocation.this, "Hey there", Toast.LENGTH_SHORT).show();
-                notificationBuilder.setAutoCancel(true)
-                        .setDefaults(Notification.DEFAULT_ALL)
-                        .setWhen(System.currentTimeMillis())
-                        .setSmallIcon(R.drawable.ic_launcher_foreground)
-                        .setTicker("Hearty365")
-                        .setContentTitle("REMINDER ALERT!")
-                        .setContentText(showToasts)
-                        .setContentInfo("Info");
-                mNotificationManager.notify(/*notification id*/1, notificationBuilder.build());
-
-            }
-
-        }
-    }
-
-    @Override
-    public void onLocationChanged(@NonNull List<Location> locations) {
-
-    }
-
-    @Override
-    public void onFlushComplete(int requestCode) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(@NonNull String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(@NonNull String provider) {
-
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
-
-
 }
+
+
+
+

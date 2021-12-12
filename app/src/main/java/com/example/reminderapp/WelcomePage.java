@@ -222,7 +222,7 @@ public class WelcomePage extends AppCompatActivity implements LocationListener {
 
             System.out.println("Location changed function called!");
 
-            Toast.makeText(this, "location changed a bit", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "location changed a bit", Toast.LENGTH_SHORT).show();
 
 
             boolean answer_needed=dbHandler.checkIfInRange(lat2,long2);
