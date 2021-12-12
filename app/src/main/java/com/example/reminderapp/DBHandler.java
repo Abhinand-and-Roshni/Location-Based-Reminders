@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.location.Location;
 
 import java.util.ArrayList;
 
@@ -42,6 +43,33 @@ public class DBHandler extends SQLiteOpenHelper {
         db.delete(TABLE_REMINDER, "REMINDER_NAME=? AND PHONE_NO=?", new String[]{remName,SignUp.phone});
         db.close();
     }
+
+    public boolean checkIfInRange(double lat2, double long2)
+    {
+        SQLiteDatabase db=this.getReadableDatabase();
+        boolean answer_needed=false;
+        String query_needed="SELECT LATITUDE, LONGITUDE, REMINDER_NAME FROM USERS U INNER JOIN REMINDERS R ON U.PHONE_NO=R.PHONE_NO WHERE R.PHONE_NO=?";
+        Cursor cursorNeeded=db.rawQuery(query_needed,new String[]{SignUp.phone});
+        if(cursorNeeded.moveToFirst()){
+            do{
+                Location.distanceBetween(lat2,long2,Double.parseDouble(cursorNeeded.getString(0)),Double.parseDouble(cursorNeeded.getString(1)),WelcomePage.distance);
+                if(WelcomePage.distance[0]<=1000)
+
+                {
+                    answer_needed=true;
+                    WelcomePage.showToasts="You are in the location of "+cursorNeeded.getString(2).toString();
+                    String remName=cursorNeeded.getString(2);
+                    deleteReminder(remName);
+                    break;
+                }
+
+            }while(cursorNeeded.moveToNext());
+        }
+        return answer_needed;
+
+
+    }
+
 
     public ArrayList<reminderDetails> readReminders()
     {
