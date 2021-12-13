@@ -28,6 +28,8 @@ public class SignUp extends AppCompatActivity {
     private EditText editPhone, editOTP;
     private Button verifyOTPBtn, generateOTPBtn;
 
+    private Button btn_surpass; //TODO: remove after done
+
     private String verificationId;
     public  static String phone;
 
@@ -73,6 +75,14 @@ public class SignUp extends AppCompatActivity {
                 }
 
 
+            }
+        });
+        //TODO: remove test button after coding
+        btn_surpass = (Button) findViewById(R.id.btn_surpass);
+        btn_surpass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SignUp.this, WelcomePage.class));
             }
         });
     }
