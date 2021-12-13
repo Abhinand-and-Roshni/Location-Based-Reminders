@@ -254,5 +254,3 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
 }
 
 
-
-
