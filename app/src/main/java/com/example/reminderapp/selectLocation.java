@@ -64,7 +64,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class selectLocation extends AppCompatActivity implements OnMapReadyCallback{
-
+//this is a comment
     boolean isPermissionGranted;
     GoogleMap mGoogleMap;
     ImageView img_search_icon;

@@ -59,7 +59,7 @@ public class WelcomePage extends AppCompatActivity implements LocationListener {
     boolean isPermissionGranted;
 
     //ROSHNI BALASUBRAMANIAN BALANEHRU JEEVA
-
+    //test message is the app debugged??
 
 
     public void onBackPressed()
