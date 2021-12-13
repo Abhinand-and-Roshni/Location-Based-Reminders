@@ -18,6 +18,10 @@ public class deleteActivity extends AppCompatActivity {
     private Button deleteBtn;
     String remName,remLoc,remLat,remLong;
 
+    public void onBackPressed(){
+        startActivity(new Intent(deleteActivity.this,WelcomePage.class));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
