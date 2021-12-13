@@ -28,7 +28,7 @@ public class SignUp extends AppCompatActivity {
     private EditText editPhone, editOTP;
     private Button verifyOTPBtn, generateOTPBtn;
 
-    private Button btn_surpass; //TODO: remove after done
+    private Button btn_surpass;
 
     private String verificationId;
     public  static String phone;
