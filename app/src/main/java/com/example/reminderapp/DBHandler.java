@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class DBHandler extends SQLiteOpenHelper {
 
     public static final String DB_NAME ="info_users";
-    public static int DB_VERSION=3;
+    public static int DB_VERSION=1;
     public static final String TABLE_NAME="USERS";
     public static final String PHONE_NO="PHONE_NO";
     public static final String USER_NAME="USER_NAME";
@@ -23,7 +23,6 @@ public class DBHandler extends SQLiteOpenHelper {
     public static final String LONGITUDE="LONGITUDE";
     public static final String PLACE_NAME="PLACE_NAME";
 
-    private static final String DATABASE_ALTER_REMINDERS = "ALTER TABLE "+TABLE_REMINDER+ " ADD COLUMN " + PLACE_NAME + " TEXT";
 
     public DBHandler(Context context)
     {
@@ -34,6 +33,8 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String query="CREATE TABLE "+TABLE_NAME+" ("+PHONE_NO+" TEXT,"+USER_NAME+" TEXT)";
         db.execSQL(query);
+        String query2 = "CREATE TABLE "+TABLE_REMINDER+" ("+REMINDER_NAME+" TEXT,"+LATITUDE+" TEXT,"+LONGITUDE+" TEXT,"+PLACE_NAME+" TEXT,"+PHONE_NO+" TEXT REFERENCES "+TABLE_NAME+")";
+        db.execSQL(query2);
 
     }
 
@@ -175,15 +176,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion<2)
-        {
-            String query2 = "CREATE TABLE "+TABLE_REMINDER+" ("+REMINDER_NAME+" TEXT,"+LATITUDE+" TEXT,"+LONGITUDE+" TEXT,"+PHONE_NO+" TEXT REFERENCES "+TABLE_NAME+")";
-            db.execSQL(query2);
-        }
-        if(oldVersion<3)
-        {
-            db.execSQL(DATABASE_ALTER_REMINDERS);
-        }
+
     }
 
 

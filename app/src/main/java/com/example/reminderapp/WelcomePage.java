@@ -250,6 +250,20 @@ public class WelcomePage extends AppCompatActivity implements LocationListener {
             }
         }
     }
+    @Override
+    public void onProviderEnabled(@NonNull String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(@NonNull String provider) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
 
 
 }
