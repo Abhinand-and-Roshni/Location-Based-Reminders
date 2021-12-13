@@ -76,7 +76,7 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
     String str_loc;
     private DBHandler dbHandler;
     Marker mHere;
-    LocationManager locationManager;
+    //LocationManager locationManager;
     public float distance[];
 
     public String showToasts=" ";
