@@ -86,6 +86,7 @@ public class SignUp extends AppCompatActivity {
             }
         });
     }
+    //test
     private void signInWithCredential(PhoneAuthCredential credential)
     {
         mAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
