@@ -44,94 +44,43 @@ import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.util.List;
 
-public class WelcomePage extends AppCompatActivity implements LocationListener {
+public class WelcomePage extends AppCompatActivity  {
 
     private TextView helloUserView;
     private String usersname;
     private DBHandler dbHandler;
-    private Button btn_create_rem,btn_view_rem,btn_logout;
-    double lat2, long2; //current loc
-    LocationManager locationManager;
+    private Button btn_create_rem, btn_view_rem, btn_logout;
     public static float distance[];
-    NotificationManager mNotificationManager;
-    NotificationCompat.Builder notificationBuilder;
-    public static String showToasts=" ";
-    boolean isPermissionGranted;
-
-    //ROSHNI BALASUBRAMANIAN BALANEHRU JEEVA
-    //test message is the app debugged??
 
 
-    public void onBackPressed()
-    {
-        Intent a = new Intent(Intent.ACTION_MAIN);
-        a.addCategory(Intent.CATEGORY_HOME);
-        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(a);
+    @Override
+    public void onBackPressed() {
+        Intent i = new Intent(Intent.ACTION_MAIN);
+        i.addCategory(Intent.CATEGORY_HOME);
+        startActivity(i);
+        //super.onBackPressed();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome_page);
-        dbHandler= new DBHandler(WelcomePage.this);
+
+        startService(new Intent(WelcomePage.this, BackgroundService.class));
 
 
-        usersname=dbHandler.findUserName(SaveSharedPreference.getPhoneNo(WelcomePage.this));
-        helloUserView=findViewById(R.id.helloUserView);
-        helloUserView.setText("Hey there, "+usersname + "!");
+        dbHandler = new DBHandler(WelcomePage.this);
 
-        btn_create_rem=findViewById(R.id.btn_create_rem);
-        btn_view_rem=findViewById(R.id.btn_view_rem);
-        btn_logout=findViewById(R.id.btn_logout);
+
+        usersname = dbHandler.findUserName(SaveSharedPreference.getPhoneNo(WelcomePage.this));
+        helloUserView = findViewById(R.id.helloUserView);
+        helloUserView.setText("Hey there, " + usersname + "!");
+
+        btn_create_rem = findViewById(R.id.btn_create_rem);
+        btn_view_rem = findViewById(R.id.btn_view_rem);
+        btn_logout = findViewById(R.id.btn_logout);
 
         distance = new float[2];
-
-
-
-        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        String NOTIFICATION_CHANNEL_ID="my_channel_id_01";
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "My Notifications", mNotificationManager.IMPORTANCE_HIGH);
-
-            notificationChannel.setDescription("Channel description");
-            notificationChannel.enableLights(true);
-            notificationChannel.setLightColor(Color.RED);
-            notificationChannel.setVibrationPattern(new long[]{0, 1000, 500, 1000});
-            notificationChannel.enableVibration(true);
-            mNotificationManager.createNotificationChannel(notificationChannel);
-        }
-
-        checkMyPermissions();
-
-        if (isPermissionGranted) {
-            if (checkGooglePlayServices()) {
-                //Toast.makeText(this, "Google PlayServices are available", Toast.LENGTH_SHORT).show();
-                SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.frag_map);
-            } else {
-                System.err.println("Google play services are not available!");
-                //Toast.makeText(this, "Google PlayServices are not available", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
-
-
-        locationManager=(LocationManager)getSystemService(Context.LOCATION_SERVICE);
-
-
-
-        if(ActivityCompat.checkSelfPermission(WelcomePage.this, Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED);
-        {
-            ActivityCompat.requestPermissions(WelcomePage.this,new String[] { Manifest.permission.ACCESS_FINE_LOCATION}, 100);
-        }
-
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, (long) 0.0f,0.0f, (LocationListener) this);
-        locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, null);
-
 
 
 
@@ -139,7 +88,7 @@ public class WelcomePage extends AppCompatActivity implements LocationListener {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(WelcomePage.this, "VIEWING REMINDERS!!", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(WelcomePage.this,viewReminders.class));
+                startActivity(new Intent(WelcomePage.this, viewReminders.class));
             }
         });
 
@@ -150,21 +99,21 @@ public class WelcomePage extends AppCompatActivity implements LocationListener {
                 builder.setMessage("Are you sure you want to log out?");
                 builder.setTitle("Alert!");
                 builder.setCancelable(false);
-                builder.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog,int which){
+                    public void onClick(DialogInterface dialog, int which) {
                         startActivity(new Intent(WelcomePage.this, MainActivity.class));
                         SaveSharedPreference.clearPhoneNo(WelcomePage.this);
                         Toast.makeText(WelcomePage.this, "User logged out.", Toast.LENGTH_SHORT).show();
                     }
                 });
                 builder.setNegativeButton("No",
-                        new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialog, int which){
-                        dialog.cancel();
-                    }
-                });
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
             }
@@ -180,91 +129,8 @@ public class WelcomePage extends AppCompatActivity implements LocationListener {
 
     }
 
-    private boolean checkGooglePlayServices() {
-        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
-        int result = googleApiAvailability.isGooglePlayServicesAvailable(this);
-        if(result == ConnectionResult.SUCCESS){
-            return true;
-        }else if(googleApiAvailability.isUserResolvableError(result)){
-            Dialog dialog = googleApiAvailability.getErrorDialog(this, result, 201, new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    //Toast.makeText(WelcomePage.this, "User cancelled", Toast.LENGTH_SHORT).show();
-                    System.out.println("User cancelled action.");
-                }
-            });
-            dialog.show();
-        }
-        return false;
-    }
 
-    private void checkMyPermissions() {
-        Dexter.withContext(this).withPermission(Manifest.permission.ACCESS_FINE_LOCATION).withListener(new PermissionListener() {
-            @Override
-            public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
-                isPermissionGranted = true;
-                //Toast.makeText(WelcomePage.this, "Location Permission Granted", Toast.LENGTH_SHORT).show();
-                System.out.println("Location permissions have been granted");
-            }
 
-            @Override
-            public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
-                Intent intent_settings = new Intent();
-                intent_settings.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                Uri uri = Uri.fromParts("package", getPackageName(), "");
-                intent_settings.setData(uri);
-                startActivity(intent_settings);
-            }
-
-            @Override
-            public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
-                permissionToken.continuePermissionRequest();
-            }
-        }).check();
-    }
-
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-        if(lat2!=location.getLatitude() && long2!=location.getLongitude())
-        {
-            lat2 = location.getLatitude(); //current lat
-            long2 = location.getLongitude(); //current long
-
-            System.out.println("Location changed function called!");
-
-            //Toast.makeText(this, "location changed a bit", Toast.LENGTH_SHORT).show();
-            boolean answer_needed=dbHandler.checkIfInRange(lat2,long2,SaveSharedPreference.getPhoneNo(WelcomePage.this));
-
-            if(answer_needed==true) {
-
-                notificationBuilder.setAutoCancel(true)
-                        .setDefaults(Notification.DEFAULT_ALL)
-                        .setWhen(System.currentTimeMillis())
-                        .setSmallIcon(R.drawable.ic_launcher_foreground)
-                        .setTicker("Hearty365")
-                        .setContentTitle("Hey, "+usersname + ". You have a reminder!")
-                        .setContentText(showToasts)
-                        .setContentInfo("Info");
-                mNotificationManager.notify(1, notificationBuilder.build());
-
-                //Toast.makeText(this, "Reminder notification sent!", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-    @Override
-    public void onProviderEnabled(@NonNull String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(@NonNull String provider) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
 
 
 }

@@ -54,10 +54,10 @@ public class DBHandler extends SQLiteOpenHelper {
         if(cursorNeeded.moveToFirst()){
             do{
                 Location.distanceBetween(lat2,long2,Double.parseDouble(cursorNeeded.getString(0)),Double.parseDouble(cursorNeeded.getString(1)),WelcomePage.distance);
-                if(WelcomePage.distance[0]<=1000)
+                if(WelcomePage.distance[0]<=250)
                 {
                     answer_needed=true;
-                    WelcomePage.showToasts="You are in the location of the '"+cursorNeeded.getString(2).toString() +"' reminder!";
+                    BackgroundService.showToasts="You are in the location of the '"+cursorNeeded.getString(2).toString() +"' reminder!";
                     String remName=cursorNeeded.getString(2);
                     deleteReminder(remName, phonenos);
                     break;
