@@ -75,8 +75,8 @@ public class BackgroundService extends Service implements LocationListener {
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setTicker("Hearty365")
-                .setContentTitle("Reminder App is Running !!")
-                .setContentText("It is actively registering your location.")
+                .setContentTitle("Reminder App is Running")
+                .setContentText("Disable GPS permissions to prevent this.")
                 .setContentInfo("Info");
 
 
@@ -96,6 +96,8 @@ public class BackgroundService extends Service implements LocationListener {
     public IBinder onBind(Intent intent) {
         return null;
     }
+
+
 
 
     @Override

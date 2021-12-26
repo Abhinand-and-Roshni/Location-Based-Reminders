@@ -6,6 +6,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.ServiceCompat;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -43,6 +44,8 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.util.List;
+
+import static androidx.core.app.ServiceCompat.stopForeground;
 
 public class WelcomePage extends AppCompatActivity  {
 
