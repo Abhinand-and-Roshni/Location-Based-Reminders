@@ -57,6 +57,14 @@ public class viewReminders extends AppCompatActivity {
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
+            reminderDetails modal = reminderDetailsArrayList.get(viewHolder.getAdapterPosition());
+
+
+            String remName = modal.getReminderName();
+
+            dbHandler=new DBHandler(viewReminders.this);
+            dbHandler.deleteReminder(remName,SaveSharedPreference.getPhoneNo(viewReminders.this));
+
             reminderDetailsArrayList.remove(viewHolder.getAdapterPosition());
 
 
