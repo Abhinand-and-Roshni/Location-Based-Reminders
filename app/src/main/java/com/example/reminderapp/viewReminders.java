@@ -1,6 +1,8 @@
 package com.example.reminderapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,7 +42,26 @@ public class viewReminders extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(viewReminders.this,RecyclerView.VERTICAL,false);
         remindersRV.setLayoutManager(linearLayoutManager);
 
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(remindersRV);
+
         remindersRV.setAdapter(reminderRVAdapter);
 
     }
+    //roshni working on deleting slide feature
+    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+            reminderDetailsArrayList.remove(viewHolder.getAdapterPosition());
+
+
+            reminderRVAdapter.notifyDataSetChanged();
+
+        }
+    };
 }
