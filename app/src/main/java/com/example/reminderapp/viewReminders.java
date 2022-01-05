@@ -1,11 +1,14 @@
 package com.example.reminderapp;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +50,7 @@ public class viewReminders extends AppCompatActivity {
         remindersRV.setAdapter(reminderRVAdapter);
 
     }
-    //roshni working on deleting slide feature
+
     ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
         @Override
         public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -63,12 +66,42 @@ public class viewReminders extends AppCompatActivity {
             String remName = modal.getReminderName();
 
             dbHandler=new DBHandler(viewReminders.this);
-            dbHandler.deleteReminder(remName,SaveSharedPreference.getPhoneNo(viewReminders.this));
 
-            reminderDetailsArrayList.remove(viewHolder.getAdapterPosition());
+            //alert dialog inclusion start
+            AlertDialog.Builder builder = new AlertDialog.Builder(viewReminders.this);
+            builder.setMessage("Are you sure you want to delete this reminder?");
+            builder.setTitle("CONFIRMATION:");
+            builder.setCancelable(false);
+            builder.setPositiveButton("Yes",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which){
+                            dbHandler.deleteReminder(remName,SaveSharedPreference.getPhoneNo(viewReminders.this));
+                            reminderDetailsArrayList.remove(viewHolder.getAdapterPosition());
+                            reminderRVAdapter.notifyDataSetChanged();
+                            Toast.makeText(viewReminders.this, "Reminder deleted", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog,int which){
+                    dialog.cancel();
+                    Toast.makeText(viewReminders.this, "Deletion cancelled", Toast.LENGTH_SHORT).show();
+                }
+            });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+
+            //alert dialog inclusion end
 
 
-            reminderRVAdapter.notifyDataSetChanged();
+            //dbHandler.deleteReminder(remName,SaveSharedPreference.getPhoneNo(viewReminders.this));
+
+            //reminderDetailsArrayList.remove(viewHolder.getAdapterPosition());
+
+
+            //reminderRVAdapter.notifyDataSetChanged();
 
         }
     };
