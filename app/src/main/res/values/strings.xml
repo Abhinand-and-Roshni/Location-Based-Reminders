@@ -15,4 +15,5 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="txt_proceed">PROCEED</string>
     <string name="str_act">What would you like to do?</string>
+    <string name="txt_distanceString_str">Distance from location to activate reminder (in km):</string>
 </resources>

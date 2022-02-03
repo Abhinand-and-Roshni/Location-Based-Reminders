@@ -47,6 +47,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
@@ -68,8 +69,8 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
     boolean isPermissionGranted;
     GoogleMap mGoogleMap;
     ImageView img_search_icon;
-    EditText et_location, et_rem;
-    Button btn_add_rem;
+    EditText et_location, et_rem, et_distance;
+    FloatingActionButton btn_add_rem;
     double lat1, long1; //marker dropped
     double lat2, long2; //current loc
     String lat1s, long1s;
@@ -112,6 +113,7 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
         img_search_icon = findViewById(R.id.img_search_icon);
         et_location = findViewById(R.id.et_location); //USER SPECIFIED LOCATION (dont store in db - only store long and lat)
         et_rem = findViewById(R.id.et_rem); //USER SPECIFIED REMINDER
+        et_distance = findViewById(R.id.et_distance);
         btn_add_rem = findViewById(R.id.btn_add_rem);
 
         dbHandler = new DBHandler(selectLocation.this);
@@ -136,9 +138,14 @@ public class selectLocation extends AppCompatActivity implements OnMapReadyCallb
             @Override
             public void onClick(View v) {
                 String location = et_location.getText().toString();
+                float distance = Float.valueOf(et_distance.getText().toString());
                 if (location == null) {
                     Toast.makeText(selectLocation.this, "Type a valid location!", Toast.LENGTH_SHORT).show();
-                } else {
+                }
+                else if(distance == 0){
+                    Toast.makeText(selectLocation.this, "Distance set as 250 meters", Toast.LENGTH_SHORT).show();
+                }
+                else {
                     Geocoder geocoder = new Geocoder(selectLocation.this, Locale.getDefault());
                     try {
                         List<Address> listAddress = geocoder.getFromLocationName(location, 1);

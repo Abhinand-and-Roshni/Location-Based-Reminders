@@ -34,6 +34,7 @@ public class DBHandler extends SQLiteOpenHelper {
         String query="CREATE TABLE "+TABLE_NAME+" ("+PHONE_NO+" TEXT,"+USER_NAME+" TEXT)";
         db.execSQL(query);
         String query2 = "CREATE TABLE "+TABLE_REMINDER+" ("+REMINDER_NAME+" TEXT,"+LATITUDE+" TEXT,"+LONGITUDE+" TEXT,"+PLACE_NAME+" TEXT,"+PHONE_NO+" TEXT REFERENCES "+TABLE_NAME+")";
+        //String query2 = "CREATE TABLE "+TABLE_REMINDER+" ("+REMINDER_NAME+" TEXT,"+LATITUDE+" REAL,"+LATITUDE+" TEXT,"+LONGITUDE+" TEXT,"+PLACE_NAME+" TEXT,"+PHONE_NO+" TEXT REFERENCES "+TABLE_NAME+")";
         db.execSQL(query2);
 
     }
@@ -54,7 +55,8 @@ public class DBHandler extends SQLiteOpenHelper {
         if(cursorNeeded.moveToFirst()){
             do{
                 Location.distanceBetween(lat2,long2,Double.parseDouble(cursorNeeded.getString(0)),Double.parseDouble(cursorNeeded.getString(1)),WelcomePage.distance);
-                if(WelcomePage.distance[0]<=250)
+                //float dist = query for getting distance
+                if(WelcomePage.distance[0]<=250) //if(WelcomePage.distance[0]<=dist)
                 {
                     answer_needed=true;
                     BackgroundService.showToasts="You are in the location of the '"+cursorNeeded.getString(2).toString() +"' reminder!";
@@ -93,6 +95,7 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values=new ContentValues();
         values.put(PHONE_NO,phonenos);
         values.put(REMINDER_NAME,remname);
+        //values.put(DISTANCE, distance);
         values.put(PLACE_NAME,remplace);
         values.put(LATITUDE,latitude);
         values.put(LONGITUDE,longitude);
