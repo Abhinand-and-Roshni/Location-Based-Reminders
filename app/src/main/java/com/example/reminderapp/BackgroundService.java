@@ -46,7 +46,7 @@ public class BackgroundService extends Service implements LocationListener {
     public void onCreate()
     {
 
-        System.out.println("Service STARTEDDDDD");
+        System.out.println("Service has started");
 
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -102,7 +102,7 @@ public class BackgroundService extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-
+//float dist;
         if(lat2!=location.getLatitude() && long2!=location.getLongitude())
         {
             lat2 = location.getLatitude(); //current lat
