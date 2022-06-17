@@ -17,7 +17,8 @@ To protect users' data, there will be an OTP mechanism implemented by making use
   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/SQLite370.svg/1024px-SQLite370.svg.png" style="height:100px; width:200px;">    <img src="https://firebase.google.com/downloads/brand-guidelines/PNG/logo-standard.png" style="height:100px; width:350px;">
 
 # Application Demo
- <video width="320" height="240" controls>
-  <source src="https://github.com/Abhinand-and-Roshni/Location-Based-Reminders/blob/branch1/LocationBasedReminder-RunThrough.mp4" type="video/mp4">
-  Error Message
-</video>
+
+https://user-images.githubusercontent.com/54448939/174324516-dfe6cbd2-1d1c-4ccc-a5ba-a9d1b40489f2.mp4
+
+
+
